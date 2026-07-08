@@ -1,0 +1,263 @@
+/* Custom pack editor — mobile-first dark sheet. All classes prefixed `packs-`.
+   Reuses global .btn/.btn-primary/.btn-ghost when present; the packs- rules
+   below act as standalone fallbacks so the editor looks fine on its own. */
+
+.packs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: #0d0f14;
+  color: #f2f3f5;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.packs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #23262e;
+  position: sticky;
+  top: 0;
+  background: #0d0f14;
+}
+
+.packs-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.packs-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.packs-section-title {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b90a0;
+}
+
+.packs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.packs-card {
+  background: #171a21;
+  border: 1px solid #262a33;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.packs-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.packs-card-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.packs-card-count {
+  color: #8b90a0;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.packs-card-desc {
+  color: #b6bac6;
+  font-size: 0.85rem;
+  margin: 6px 0 0;
+}
+
+.packs-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.packs-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7fd6a2;
+  border: 1px solid #2f5c43;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+/* Buttons — standalone fallback for .btn family. */
+.packs-btn,
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #363b47;
+  background: #20242e;
+  color: #f2f3f5;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.packs-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.packs-btn-primary,
+.btn-primary {
+  background: #4c6ef5;
+  border-color: #4c6ef5;
+  color: #fff;
+}
+
+.packs-btn-ghost,
+.btn-ghost {
+  background: transparent;
+  border-color: #363b47;
+}
+
+.packs-btn-danger {
+  background: #3a1e22;
+  border-color: #6e2a30;
+  color: #ff9aa2;
+}
+
+.packs-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.packs-label {
+  font-size: 0.85rem;
+  color: #b6bac6;
+}
+
+.packs-input,
+.packs-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #363b47;
+  background: #12151b;
+  color: #f2f3f5;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.packs-textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.packs-pair-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.packs-pair-row .packs-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.packs-pair-sep {
+  color: #8b90a0;
+  font-weight: 700;
+}
+
+.packs-remove {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid #363b47;
+  background: #20242e;
+  color: #ff9aa2;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.packs-errors {
+  list-style: disc;
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: #ff9aa2;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.packs-note {
+  color: #7fd6a2;
+  font-size: 0.85rem;
+  margin: 8px 0 0;
+}
+
+.packs-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.packs-confirm {
+  background: #23262e;
+  border: 1px solid #6e2a30;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.packs-confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.packs-hidden-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.packs-download-link {
+  display: none;
+}
