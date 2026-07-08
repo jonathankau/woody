@@ -98,8 +98,9 @@ export function HowToPlay({
             <h3 className="howto-section-title">Round Loop</h3>
             <p>
               Each round: give one clue about your word (never say the word
-              itself), discuss who feels off, then take a public vote and
-              eliminate someone. Repeat until a team wins.
+              itself), discuss who feels off, then take a public vote. The clue
+              order is random once per game and stays the same as players leave;
+              Baiban never starts the clues.
             </p>
             <RoundLoopDiagram />
           </section>
@@ -109,7 +110,8 @@ export function HowToPlay({
             <p>
               Vote out loud, together. No secret ballots and no voting for
               yourself. Once the group has a result, the host taps who was voted
-              off, or taps no elimination if the vote did not remove anyone.
+              off, or taps no elimination if the vote tied. No elimination means
+              another clue round, then another vote.
             </p>
           </section>
 

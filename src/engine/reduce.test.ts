@@ -68,7 +68,13 @@ describe('clue-order flow', () => {
     return s
   }
 
-  it('BEGIN_DISCUSSION -> discussion; BEGIN_VOTE -> vote', () => {
+  it('BEGIN_VOTE goes directly from clue-order to vote', () => {
+    const s = toClueOrder()
+    const next = reduce(s, { type: 'BEGIN_VOTE' }, rng)
+    expect(next.phase).toBe('vote')
+  })
+
+  it('legacy BEGIN_DISCUSSION -> discussion; BEGIN_VOTE -> vote still works', () => {
     let s = toClueOrder()
     s = reduce(s, { type: 'BEGIN_DISCUSSION' }, rng)
     expect(s.phase).toBe('discussion')
@@ -161,18 +167,42 @@ describe('CONTINUE advances rounds', () => {
     expect(next.speakingOrder.length).toBe(5)
   })
 
-  it('rotate rule advances the starting speaker across rounds, skipping baiban', () => {
-    const cfg = customConfig(6, { startingSpeakerRule: 'rotate', baibanCount: 1, undercoverCount: 1 })
+  it('keeps the clue order stable across rounds, dropping eliminated players', () => {
+    const cfg = customConfig(6, { baibanCount: 1, undercoverCount: 1 })
     let s = createGame(cfg, PAIR, seededRng(11))
-    const starters: string[] = []
-    for (let round = 0; round < 3; round++) {
-      const first = s.players.find((p) => p.id === s.speakingOrder[0])!
-      starters.push(first.id)
-      expect(first.role).not.toBe('baiban')
-      // Simulate a no-op round: go to vote, no-elimination via majority no-majority.
-      s = { ...s, phase: 'resolution', winner: null }
-      s = reduce(s, { type: 'CONTINUE' }, rng)
+    const originalOrder = s.speakingOrder.slice()
+    const eliminatedId = originalOrder[1]
+    s = {
+      ...s,
+      phase: 'resolution',
+      winner: null,
+      players: s.players.map((p) => (p.id === eliminatedId ? { ...p, eliminated: true } : p)),
     }
-    expect(starters.length).toBe(3)
+    s = reduce(s, { type: 'CONTINUE' }, rng)
+    expect(s.speakingOrder).toEqual(originalOrder.filter((id) => id !== eliminatedId))
+  })
+
+  it('does not let Baiban become first after earlier players are eliminated', () => {
+    const cfg = customConfig(6, { baibanCount: 1, undercoverCount: 1 })
+    let s = createGame(cfg, PAIR, seededRng(31))
+    const baiban = s.players.find((p) => p.role === 'baiban')!
+    const eliminated = s.players.find((p) => p.id !== baiban.id)!
+    s = {
+      ...s,
+      phase: 'resolution',
+      winner: null,
+      speakingOrder: [
+        eliminated.id,
+        baiban.id,
+        ...s.speakingOrder.filter((id) => id !== eliminated.id && id !== baiban.id),
+      ],
+      players: s.players.map((p) =>
+        p.id === eliminated.id ? { ...p, eliminated: true } : p,
+      ),
+    }
+    s = reduce(s, { type: 'CONTINUE' }, rng)
+    const first = s.players.find((p) => p.id === s.speakingOrder[0])!
+    expect(first.role).not.toBe('baiban')
+    expect(s.speakingOrder).toContain(baiban.id)
   })
 })

@@ -108,10 +108,9 @@ async function eliminateUntilResults(
     if (await page.getByTestId('results-winner').isVisible().catch(() => false)) return
     if (await page.getByTestId('resolution-continue').isVisible().catch(() => false)) {
       await page.getByTestId('resolution-continue').click()
-      // Next round: clue-order -> discussion -> vote.
+      // Next round: clue-order -> vote.
       if (await page.getByTestId('clue-order-continue').isVisible().catch(() => false)) {
         await page.getByTestId('clue-order-continue').click()
-        await page.getByTestId('discussion-vote').click()
       }
     }
   }

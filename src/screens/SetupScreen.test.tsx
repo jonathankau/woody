@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { beforeEach, describe, it, expect, vi } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { SetupScreen } from './SetupScreen'
@@ -12,6 +12,10 @@ function renderSetup() {
 }
 
 describe('SetupScreen', () => {
+  beforeEach(() => {
+    window.localStorage.clear()
+  })
+
   it('shows a rule summary matching the engine for the default config', () => {
     renderSetup()
     const preset = PRESETS[0]
@@ -61,6 +65,22 @@ describe('SetupScreen', () => {
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Baiban')
   })
 
+  it('rebalances undercovers when Baiban is toggled and undercovers were not overridden', async () => {
+    const user = userEvent.setup()
+    renderSetup()
+    // 7 players -> 2 undercovers + 1 Baiban by default.
+    for (let i = 0; i < 3; i++) {
+      await user.click(screen.getByRole('button', { name: 'Add player' }))
+    }
+    await user.click(screen.getByText('Advanced settings'))
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('2 undercovers')
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Baiban')
+
+    await user.click(screen.getByLabelText('Baiban in play'))
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('3 undercovers')
+    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Baiban')
+  })
+
   it('stops auto-filling counts once the host overrides them', async () => {
     const user = userEvent.setup()
     renderSetup()
@@ -75,6 +95,20 @@ describe('SetupScreen', () => {
     }
     // 10 players recommends 3 undercovers, but override keeps 2.
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('2 undercovers')
+  })
+
+  it('does not rebalance undercovers after the host overrides that count', async () => {
+    const user = userEvent.setup()
+    renderSetup()
+    for (let i = 0; i < 3; i++) {
+      await user.click(screen.getByRole('button', { name: 'Add player' }))
+    }
+    await user.click(screen.getByText('Advanced settings'))
+    const undercover = screen.getByLabelText('Undercovers') as HTMLInputElement
+    await user.clear(undercover)
+    await user.click(screen.getByLabelText('Baiban in play'))
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 undercover')
+    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Baiban')
   })
 
   it('renders validation errors on start when names are duplicated', async () => {

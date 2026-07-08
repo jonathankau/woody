@@ -18,7 +18,6 @@ function doReveal(s: GameState): GameState {
 
 /** From clue-order, walk to the vote phase. */
 function toVote(s: GameState): GameState {
-  s = reduce(s, { type: 'BEGIN_DISCUSSION' }, rng)
   s = reduce(s, { type: 'BEGIN_VOTE' }, rng)
   return s
 }

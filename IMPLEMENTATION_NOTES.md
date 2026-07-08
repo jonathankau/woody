@@ -16,6 +16,7 @@ Independent candidate implementation. Spec: `2026-07-07 woody-implementation-spe
 - Second tie during a PK revote -> no elimination (spec implies via "PK second tie" test).
 - `infiltratorsWinTogether` flag distinguishes Mr. White (alive Baiban counts toward and shares the undercover-side win, winner label "infiltrators") from Woody Standard (undercover win needs an alive undercover).
 - Classic Wo Di uses `survive-after-undercovers` for Baiban (no guess on elimination); a correct guess win is only in `guess-on-elimination` modes.
+- Clue order is randomized once per game and remains stable across rounds, dropping eliminated players; Baiban is never first to give a clue.
 - Refresh-privacy: a game saved during `reveal-show` restores to `reveal-pass` for the same player, so the pass gate always precedes a word. Back button is trapped via pushState.
 - Saved game envelope carries `schemaVersion`; mismatch offers "Start new game" instead of crashing.
 - Node 25's experimental built-in `localStorage` shadows jsdom's in Vitest, so the test scripts set `NODE_OPTIONS=--no-experimental-webstorage` (harmless on Node 22, which CI uses).
@@ -24,8 +25,8 @@ Independent candidate implementation. Spec: `2026-07-07 woody-implementation-spe
 
 Built by parallel subagents against `CONTRACTS.md`:
 
-1. **Rules engine + unit tests** — pure reducer in `src/engine/` (presets, validation, vote/tie/win logic, Baiban guess, reveal flow), 85 tests including one full-game simulation per preset and reducer-purity checks.
-2. **Word packs + custom pack editor** — 243 pairs across the 6 spec packs, custom pack import/export/validation with readable errors, used-pair history, `PackEditor` dialog; 53 tests.
+1. **Rules engine + unit tests** — pure reducer in `src/engine/` (presets, validation, vote/tie/win logic, Baiban guess, reveal flow), including one full-game simulation per preset and reducer-purity checks.
+2. **Word packs + custom pack editor** — 250 pairs per built-in pack, custom pack import/export/validation with readable errors, used-pair history, `PackEditor` dialog.
 3. **UI / game flow** — screens per phase, setup with presets/advanced overrides/pack selection/draft persistence, auto-save + restore, back-button pushState trap, How to Play bottom sheet with SVG diagrams and `winChart()`-driven win chart; ~33 component tests.
 4. **Playwright + accessibility** — mobile (Pixel 7) e2e per the spec matrix plus axe scans of key screens. Tests deduce roles by recording words during the reveal pass (minority word = undercover, no word = Baiban), then vote deterministically.
 

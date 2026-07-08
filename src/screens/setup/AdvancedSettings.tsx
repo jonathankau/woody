@@ -1,8 +1,6 @@
 import type {
   BaibanRule,
   RuleSet,
-  StartingSpeakerRule,
-  UndercoverWinRule,
 } from '../../engine'
 
 /**
@@ -15,12 +13,14 @@ export function AdvancedSettings({
   strictSurfaced,
   onPatchRules,
   onCountOverride,
+  onBaibanChange,
 }: {
   rules: RuleSet
   playerCount: number
   strictSurfaced: boolean
   onPatchRules: (patch: Partial<RuleSet>) => void
   onCountOverride: (patch: Partial<RuleSet>) => void
+  onBaibanChange: (baibanCount: 0 | 1) => void
 }): React.JSX.Element {
   const maxUndercover = Math.max(1, playerCount - 2 - rules.baibanCount)
 
@@ -50,7 +50,7 @@ export function AdvancedSettings({
             id="adv-baiban"
             type="checkbox"
             checked={rules.baibanCount === 1}
-            onChange={(e) => onCountOverride({ baibanCount: e.target.checked ? 1 : 0 })}
+            onChange={(e) => onBaibanChange(e.target.checked ? 1 : 0)}
           />
         </div>
 
@@ -68,34 +68,6 @@ export function AdvancedSettings({
             </select>
           </Field>
         )}
-
-        <Field label="Undercover win threshold" htmlFor="adv-win">
-          <select
-            id="adv-win"
-            className="setup-select"
-            value={rules.undercoverWinRule}
-            onChange={(e) => onPatchRules({ undercoverWinRule: e.target.value as UndercoverWinRule })}
-          >
-            <option value="last-two-or-three">Last 3 (last 2 in small games)</option>
-            <option value="one-civilian-left">Only 1 civilian left</option>
-            <option value="parity-plus-one">Civilians = undercovers + 1</option>
-          </select>
-        </Field>
-
-        <Field label="Starting speaker" htmlFor="adv-speaker">
-          <select
-            id="adv-speaker"
-            className="setup-select"
-            value={rules.startingSpeakerRule}
-            onChange={(e) =>
-              onPatchRules({ startingSpeakerRule: e.target.value as StartingSpeakerRule })
-            }
-          >
-            <option value="random">Random</option>
-            <option value="host-chooses">Host chooses</option>
-            <option value="rotate">Rotate</option>
-          </select>
-        </Field>
 
         {strictSurfaced && (
           <div className="setup-field setup-field-inline">

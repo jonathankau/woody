@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { recommendedRoleCounts, PRESETS } from './presets'
+import { recommendedRoleCounts, recommendedRoleCountsWithBaiban, PRESETS } from './presets'
 import { validateConfig } from './validate'
 import { customConfig, names, presetConfig } from './testutils'
 import type { GameConfig } from './types'
@@ -20,11 +20,28 @@ describe('recommendedRoleCounts', () => {
       expect(recommendedRoleCounts(n)).toEqual({ undercoverCount: 3, baibanCount: 1 })
     }
   })
+
+  it('moves the Baiban slot to undercovers when Baiban is disabled', () => {
+    expect(recommendedRoleCountsWithBaiban(8, 1)).toEqual({
+      undercoverCount: 2,
+      baibanCount: 1,
+    })
+    expect(recommendedRoleCountsWithBaiban(8, 0)).toEqual({
+      undercoverCount: 3,
+      baibanCount: 0,
+    })
+  })
 })
 
 describe('PRESETS', () => {
   it('exposes the three presets with stable ids', () => {
     expect(PRESETS.map((p) => p.id)).toEqual(['woody-standard', 'classic-wodi', 'mr-white'])
+  })
+
+  it('gives every preset concrete setup details', () => {
+    for (const preset of PRESETS) {
+      expect(preset.details.length).toBeGreaterThanOrEqual(3)
+    }
   })
 
   it('woody-standard: guess baiban, one-civilian, not infiltrators, PK', () => {

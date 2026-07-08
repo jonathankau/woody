@@ -15,7 +15,7 @@ function noElimReason(outcome: GameState['lastVoteOutcome']): string {
     case 'no-elimination':
       return 'The tie eliminated nobody.'
     case 'host-decided':
-      return 'The host called it: no elimination.'
+      return 'No one is out. Give another clue round, then revote.'
     default:
       return 'No elimination this round.'
   }

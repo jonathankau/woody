@@ -10,7 +10,9 @@ reveals, give clues, discuss, vote in the open, and figure out who's faking.
 
 - 4–12 players, one phone, no accounts, no internet needed after load.
 - Three presets: **Woody Standard**, **Classic Wo Di**, and **Undercover / Mr. White**,
-  plus advanced overrides for win thresholds, Baiban behavior, and clue order.
+  plus advanced overrides for role counts, Baiban behavior, and strict clues.
+- Clue order is randomized once per game, stays stable across rounds, and never
+  starts with Baiban.
 - Six built-in word packs with 250 pairs each, plus a custom pack editor with
   JSON import/export.
 - Game state persists across refresh and sleep; a refresh can never leak another

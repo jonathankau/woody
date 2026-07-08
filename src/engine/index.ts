@@ -1,7 +1,7 @@
 export * from './types'
 
 export { SCHEMA_VERSION } from './version'
-export { recommendedRoleCounts, PRESETS } from './presets'
+export { recommendedRoleCounts, recommendedRoleCountsWithBaiban, PRESETS } from './presets'
 export { validateConfig } from './validate'
 export { createGame } from './create'
 export { reduce } from './reduce'

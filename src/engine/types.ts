@@ -108,9 +108,9 @@ export type Phase =
   | 'reveal-pass'
   /** The current player is privately viewing their word (or no-word notice). */
   | 'reveal-show'
-  /** Clue order screen: shows speaking order and starting speaker. */
+/** Clue order screen: shows speaking order and starting speaker. */
   | 'clue-order'
-  /** Discussion prompt after clues. */
+  /** Legacy saved-game phase; new UI goes from clue order directly to vote. */
   | 'discussion'
   /** Public vote entry (tallies or host decision). */
   | 'vote'
@@ -128,6 +128,7 @@ export interface Preset {
   id: PresetId
   name: string
   tagline: string
+  details: string[]
   rules(playerCount: number): RuleSet
 }
 
@@ -192,9 +193,9 @@ export type GameAction =
   | { type: 'HIDE_WORD' }
   /** Host picked the starting speaker (host-chooses rule only; never Baiban). */
   | { type: 'CHOOSE_STARTING_SPEAKER'; playerId: string }
-  /** Clue order acknowledged; move to discussion. */
+  /** Legacy action for old saved flows; current UI skips straight to voting. */
   | { type: 'BEGIN_DISCUSSION' }
-  /** Discussion done; move to vote entry. */
+  /** Clue order or legacy discussion done; move to vote entry. */
   | { type: 'BEGIN_VOTE' }
   /**
    * Counted-vote engine path (used by simulations and tests). Keys must be

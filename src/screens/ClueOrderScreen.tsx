@@ -102,7 +102,11 @@ export function ClueOrderScreen({
       )}
 
       <div className="card clue-order-rule">
-        <p>Say one clue about your word. Don&apos;t say the word itself.</p>
+        <p>
+          Each player says one clue in this order. Then discuss who feels off
+          and vote out loud.
+        </p>
+        <p>Don&apos;t say your word itself.</p>
         {rules.strictClues && (
           <p className="clue-order-strict">Strict mode: your clue must be true about your word.</p>
         )}
@@ -114,7 +118,7 @@ export function ClueOrderScreen({
         onClick={onContinue}
         data-testid="clue-order-continue"
       >
-        {starter?.name ? `${starter.name} starts — go` : 'Start clues'}
+        Go to voting when ready
       </button>
     </section>
   )

@@ -46,7 +46,7 @@ test('public vote result entry: no elimination advances to the next round', asyn
 
   await expect(page.getByTestId('resolution-continue')).toBeVisible()
   await expect(page.locator('.resolution-out')).toContainText('Nobody was eliminated')
-  await expect(page.locator('.resolution-role')).toContainText('The host called it')
+  await expect(page.locator('.resolution-role')).toContainText('another clue round')
 
   await page.getByTestId('resolution-continue').click()
   await expect(page.getByTestId('clue-order-continue')).toBeVisible()

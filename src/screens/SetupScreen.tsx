@@ -3,6 +3,7 @@ import type { GameConfig, GameState, PresetId, RuleSet } from '../engine'
 import {
   PRESETS,
   recommendedRoleCounts,
+  recommendedRoleCountsWithBaiban,
   ruleSummary,
   validateConfig,
   createGame,
@@ -24,6 +25,22 @@ import { draftToConfig } from './setup/types'
 
 const MIN_PLAYERS = 4
 const MAX_PLAYERS = 12
+
+function rebalanceRoles(
+  playerCount: number,
+  rules: RuleSet,
+  undercoverOverridden: boolean,
+): RuleSet {
+  const maxUndercover = Math.max(1, playerCount - 2 - rules.baibanCount)
+  if (undercoverOverridden) {
+    return {
+      ...rules,
+      undercoverCount: Math.min(maxUndercover, Math.max(1, rules.undercoverCount)),
+    }
+  }
+  const rec = recommendedRoleCountsWithBaiban(playerCount, rules.baibanCount)
+  return { ...rules, undercoverCount: rec.undercoverCount, baibanCount: rec.baibanCount }
+}
 
 function defaultNames(count: number): string[] {
   return Array.from({ length: count }, (_, i) => `Player ${i + 1}`)
@@ -70,10 +87,9 @@ export function SetupScreen({
     setDraft((prev) => {
       const names = prev.playerNames.slice(0, count)
       while (names.length < count) names.push(`Player ${names.length + 1}`)
-      const rec = recommendedRoleCounts(count)
       const rules: RuleSet = prev.countsOverridden
-        ? prev.rules
-        : { ...prev.rules, undercoverCount: rec.undercoverCount, baibanCount: rec.baibanCount }
+        ? rebalanceRoles(count, prev.rules, true)
+        : { ...prev.rules, ...recommendedRoleCounts(count) }
       return { ...prev, playerNames: names, rules }
     })
   }
@@ -87,10 +103,9 @@ export function SetupScreen({
     if (draft.playerNames.length <= MIN_PLAYERS) return
     setDraft((prev) => {
       const names = prev.playerNames.filter((_, i) => i !== index)
-      const rec = recommendedRoleCounts(names.length)
       const rules: RuleSet = prev.countsOverridden
-        ? prev.rules
-        : { ...prev.rules, undercoverCount: rec.undercoverCount, baibanCount: rec.baibanCount }
+        ? rebalanceRoles(names.length, prev.rules, true)
+        : { ...prev.rules, ...recommendedRoleCounts(names.length) }
       return { ...prev, playerNames: names, rules }
     })
   }
@@ -125,6 +140,17 @@ export function SetupScreen({
       rules: { ...prev.rules, ...patch },
       countsOverridden: true,
     }))
+  }
+
+  function setBaibanCount(baibanCount: 0 | 1): void {
+    setDraft((prev) => {
+      const rules = rebalanceRoles(
+        prev.playerNames.length,
+        { ...prev.rules, baibanCount },
+        prev.countsOverridden,
+      )
+      return { ...prev, rules }
+    })
   }
 
   // ---- packs ----
@@ -252,6 +278,11 @@ export function SetupScreen({
               >
                 <span className="setup-preset-name">{preset.name}</span>
                 <span className="setup-preset-tagline">{preset.tagline}</span>
+                <span className="setup-preset-details">
+                  {preset.details.map((detail) => (
+                    <span key={detail}>{detail}</span>
+                  ))}
+                </span>
               </button>
             )
           })}
@@ -266,6 +297,7 @@ export function SetupScreen({
           strictSurfaced={draft.presetId === 'classic-wodi' || draft.rules.strictClues}
           onPatchRules={patchRules}
           onCountOverride={patchRulesAsOverride}
+          onBaibanChange={setBaibanCount}
         />
       </section>
 

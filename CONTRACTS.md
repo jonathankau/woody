@@ -17,7 +17,7 @@ export const SCHEMA_VERSION: number
 export function recommendedRoleCounts(playerCount: number): { undercoverCount: number; baibanCount: 0 | 1 }
 
 /** Preset definitions used by setup, the engine, and How to Play. */
-export interface Preset { id: PresetId; name: string; tagline: string; rules(playerCount: number): RuleSet }
+export interface Preset { id: PresetId; name: string; tagline: string; details: string[]; rules(playerCount: number): RuleSet }
 export const PRESETS: Preset[]
 
 /** Validate a config before starting: player count 4-12, unique non-empty names,
@@ -27,13 +27,12 @@ export function validateConfig(config: GameConfig): string[]
 
 /** Create a fresh game: assigns roles randomly, randomizes which side of the pair is
  *  civilian vs undercover, builds reveal order (players array order), speaking order,
- *  and starting speaker (never Baiban; respects startingSpeakerRule; for host-chooses
- *  the starting speaker is chosen later via CHOOSE_STARTING_SPEAKER).
+ *  and starting speaker (never Baiban).
  *  Initial phase: 'reveal-pass' with revealIndex 0. */
 export function createGame(config: GameConfig, pair: { id: string; packId: string; a: string; b: string }, rng: Rng): GameState
 
 /** Pure reducer for everything after game creation. Illegal actions for the current
- *  phase return the state unchanged. `rng` is used for PK/rotation/random speaker needs. */
+ *  phase return the state unchanged. `rng` is used for counted PK/random fallback needs. */
 export function reduce(state: GameState, action: GameAction, rng: Rng): GameState
 
 /** One-line rule summary for setup + results header, e.g.
@@ -54,9 +53,10 @@ export function startingSpeaker(state: GameState): Player | null
 
 - Reveal: `reveal-pass` shows "Pass to [Name]" (players[revealIndex]); `SHOW_WORD` -> `reveal-show`;
   `HIDE_WORD` -> next player's `reveal-pass`, or `clue-order` after the last player.
-- Baiban never starts: starting speaker selection excludes Baiban in every rule, including
-  rotate (skip) and host-chooses (reject Baiban id -> state unchanged).
-- Rotate rule advances `rotationIndex` each round, skipping dead and Baiban players.
+- Baiban never starts: starting speaker selection excludes Baiban. If eliminations would put
+  Baiban first in a later round, the next alive non-Baiban moves to the front.
+- Clue order is randomized once at game creation and remains stable across rounds, dropping
+  eliminated players.
 - `HOST_ELIMINATE` is the production UI path: after the group votes out loud, the host enters the
   eliminated player id or `null` for no elimination.
 - `SUBMIT_VOTE` is the counted-vote engine path for simulations and future UI variants:

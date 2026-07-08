@@ -18,6 +18,19 @@ export function recommendedRoleCounts(playerCount: number): {
   return { undercoverCount: 3, baibanCount: 1 }
 }
 
+export function recommendedRoleCountsWithBaiban(
+  playerCount: number,
+  baibanCount: 0 | 1,
+): { undercoverCount: number; baibanCount: 0 | 1 } {
+  const rec = recommendedRoleCounts(playerCount)
+  const outsiderSlots = rec.undercoverCount + rec.baibanCount
+  const maxUndercover = Math.max(1, playerCount - 2 - baibanCount)
+  return {
+    undercoverCount: Math.min(maxUndercover, Math.max(1, outsiderSlots - baibanCount)),
+    baibanCount,
+  }
+}
+
 /** Shared defaults reused across presets, overridden per preset below. */
 function baseRules(playerCount: number): Pick<RuleSet, 'undercoverCount' | 'baibanCount'> {
   return recommendedRoleCounts(playerCount)
@@ -26,7 +39,12 @@ function baseRules(playerCount: number): Pick<RuleSet, 'undercoverCount' | 'baib
 const woodyStandard: Preset = {
   id: 'woody-standard',
   name: 'Woody Standard',
-  tagline: 'The friendly default: undercovers sneak, Baiban guesses.',
+  tagline: 'Modern default: Baiban gets one guess if voted off.',
+  details: [
+    'Undercovers win when only 1 civilian remains.',
+    'Civilians must eliminate undercovers and Baiban.',
+    'Clues can be loose, funny, or strategic.',
+  ],
   rules(playerCount: number): RuleSet {
     return {
       ...baseRules(playerCount),
@@ -44,7 +62,12 @@ const woodyStandard: Preset = {
 const classicWodi: Preset = {
   id: 'classic-wodi',
   name: 'Classic Wo Di',
-  tagline: 'Traditional 谁是卧底: Baiban can survive to steal the win.',
+  tagline: 'Original-style: stricter clues and last-3 pressure.',
+  details: [
+    'Undercovers win at last 3 players (last 2 in small games).',
+    'Baiban wins by outlasting every undercover.',
+    'Clues should be true about your word.',
+  ],
   rules(playerCount: number): RuleSet {
     return {
       ...baseRules(playerCount),
@@ -62,7 +85,12 @@ const classicWodi: Preset = {
 const mrWhite: Preset = {
   id: 'mr-white',
   name: 'Undercover / Mr. White',
-  tagline: 'Infiltrators (undercovers + Mr. White) win together.',
+  tagline: 'App-style: Mr. White joins the infiltrator team.',
+  details: [
+    'Undercovers and Mr. White can win together.',
+    'Infiltrators win when only 1 civilian remains.',
+    'Mr. White gets one guess if voted off.',
+  ],
   rules(playerCount: number): RuleSet {
     return {
       ...baseRules(playerCount),

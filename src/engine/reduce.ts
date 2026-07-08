@@ -77,7 +77,7 @@ function reduceBeginDiscussion(state: GameState): GameState {
 // ---------- vote ----------
 
 function reduceBeginVote(state: GameState): GameState {
-  if (state.phase !== 'discussion') return state
+  if (state.phase !== 'discussion' && state.phase !== 'clue-order') return state
   return { ...state, phase: 'vote' }
 }
 
@@ -326,22 +326,38 @@ function reduceContinue(state: GameState, rng: Rng): GameState {
   }
 
   const nextRound = state.round + 1
-  const alive = alivePlayers(state)
-  const { speakingOrder, rotationIndex } = buildSpeakingOrder(
-    alive,
-    state.config.rules.startingSpeakerRule,
-    state.rotationIndex,
-    rng,
-  )
+  const speakingOrder = nextSpeakingOrder(state, rng)
 
   return {
     ...state,
     round: nextRound,
     phase: 'clue-order',
     speakingOrder,
-    rotationIndex,
     pkCandidateIds: null,
     lastElimination: null,
     lastVoteOutcome: null,
   }
+}
+
+function nextSpeakingOrder(state: GameState, rng: Rng): string[] {
+  const alive = alivePlayers(state)
+  const aliveById = new Map(alive.map((p) => [p.id, p]))
+  let order = state.speakingOrder.filter((id) => aliveById.has(id))
+  const missing = alive.filter((p) => !order.includes(p.id)).map((p) => p.id)
+  order = [...order, ...missing]
+
+  if (order.length === 0) {
+    return buildSpeakingOrder(
+      alive,
+      state.config.rules.startingSpeakerRule,
+      state.rotationIndex,
+      rng,
+    ).speakingOrder
+  }
+
+  const starterId = order.find((id) => aliveById.get(id)?.role !== 'baiban')
+  if (starterId && order[0] !== starterId) {
+    order = [starterId, ...order.filter((id) => id !== starterId)]
+  }
+  return order
 }

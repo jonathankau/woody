@@ -161,10 +161,9 @@ function inferTeams(
   })
 }
 
-/** Advance clue-order -> discussion -> vote, landing on the vote screen. */
+/** Advance clue-order -> vote, landing on the vote screen. */
 export async function advanceToVote(page: Page): Promise<void> {
   await page.getByTestId('clue-order-continue').click()
-  await page.getByTestId('discussion-vote').click()
   await expect(page.getByTestId('vote-no-elimination')).toBeVisible()
 }
 
@@ -201,7 +200,7 @@ export async function playRoundVotingOut(page: Page, targetName: string): Promis
   await page.getByTestId(`vote-eliminate-${id}`).click()
 }
 
-/** Advance a fresh round's reveal-less loop: clue-order -> discussion -> vote. */
+/** Advance a fresh round's reveal-less loop: clue-order -> vote. */
 export async function continueRound(page: Page): Promise<void> {
   await expect(page.getByTestId('resolution-continue')).toBeVisible()
   await page.getByTestId('resolution-continue').click()

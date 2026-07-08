@@ -37,7 +37,8 @@ export function VoteScreen({
       )}
 
       <p className="vote-rule-copy">
-        Run the vote out loud, then tap the result here. No voting for yourself.
+        Run the vote out loud, then tap the result here. If the vote ties or has
+        no consensus, choose no elimination and revote after another clue round.
       </p>
 
       <ul className="vote-list">

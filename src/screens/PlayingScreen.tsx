@@ -6,7 +6,6 @@ import { HowToPlayButton } from '../components/HowToPlayButton'
 import { RevealPassScreen } from './RevealPassScreen'
 import { RevealShowScreen } from './RevealShowScreen'
 import { ClueOrderScreen } from './ClueOrderScreen'
-import { DiscussionScreen } from './DiscussionScreen'
 import { VoteScreen } from './VoteScreen'
 import { ResolutionScreen } from './ResolutionScreen'
 import { BaibanGuessScreen } from './BaibanGuessScreen'
@@ -16,7 +15,7 @@ const PHASE_HINT: Record<GameState['phase'], string> = {
   'reveal-pass': 'Secret reveal',
   'reveal-show': 'Secret reveal',
   'clue-order': 'Clue order',
-  discussion: 'Discussion',
+  discussion: 'Voting',
   vote: 'Voting',
   resolution: 'Resolution',
   'baiban-guess': 'Baiban guess',
@@ -128,14 +127,19 @@ function PhaseView({
       return (
         <ClueOrderScreen
           state={state}
-          onContinue={() => dispatch({ type: 'BEGIN_DISCUSSION' })}
+          onContinue={() => dispatch({ type: 'BEGIN_VOTE' })}
           onChooseStarter={(playerId) =>
             dispatch({ type: 'CHOOSE_STARTING_SPEAKER', playerId })
           }
         />
       )
     case 'discussion':
-      return <DiscussionScreen state={state} onVote={() => dispatch({ type: 'BEGIN_VOTE' })} />
+      return (
+        <VoteScreen
+          state={state}
+          onHostEliminate={(playerId) => dispatch({ type: 'HOST_ELIMINATE', playerId })}
+        />
+      )
     case 'vote':
       return (
         <VoteScreen
