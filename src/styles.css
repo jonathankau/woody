@@ -694,59 +694,15 @@ p {
   gap: 0.5rem;
 }
 
-.vote-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface);
+.vote-host-pick,
+.vote-actions .btn {
+  width: 100%;
 }
 
-.vote-name {
-  font-weight: 600;
-}
-
-.vote-stepper {
+.vote-actions {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-}
-
-.vote-step {
-  min-width: var(--touch);
-  min-height: var(--touch);
-  padding: 0;
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
-.vote-count {
-  min-width: 1.6rem;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.vote-total {
-  color: var(--text-dim);
-  text-align: center;
-}
-
-.vote-total-warn {
-  color: var(--danger);
-  font-weight: 600;
-}
-
-.vote-host-pick {
-  width: 100%;
-}
-
-.vote-no-elim {
-  width: 100%;
 }
 
 .vote-lead {

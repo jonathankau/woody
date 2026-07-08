@@ -108,9 +108,8 @@ export function HowToPlay({
             <h3 className="howto-section-title">Voting</h3>
             <p>
               Vote out loud, together. No secret ballots and no voting for
-              yourself. The host tallies the votes on the phone. Ties can go to a
-              PK revote, eliminate nobody, or be settled by the host, depending
-              on your rules.
+              yourself. Once the group has a result, the host taps who was voted
+              off, or taps no elimination if the vote did not remove anyone.
             </p>
           </section>
 

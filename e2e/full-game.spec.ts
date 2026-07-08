@@ -4,7 +4,7 @@ import {
   configureAndStart,
   walkRevealsAndBuildRoster,
   advanceToVote,
-  voteStepperIdByName,
+  voteCandidateIdByName,
   playRoundVotingOut,
   continueRound,
 } from './helpers'
@@ -44,10 +44,9 @@ test('full Woody Standard game -> civilians win', async ({ page }) => {
 
   // Round 3: eliminate the Baiban. guess-on-elimination -> baiban-guess screen.
   await advanceToVote(page)
-  const ids = await voteStepperIdByName(page)
+  const ids = await voteCandidateIdByName(page)
   const baibanId = ids.get(baiban!.name)!
-  await page.getByTestId(`vote-stepper-inc-${baibanId}`).click()
-  await page.getByTestId('vote-submit').click()
+  await page.getByTestId(`vote-eliminate-${baibanId}`).click()
 
   // Baiban guess: host taps Incorrect -> civilians win.
   await expect(page.getByTestId('baiban-incorrect')).toBeVisible()

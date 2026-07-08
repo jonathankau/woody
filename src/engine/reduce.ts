@@ -190,9 +190,6 @@ function resolveTie(
 
 function reduceHostEliminate(state: GameState, playerId: string | null): GameState {
   if (state.phase !== 'vote') return state
-  const rules = state.config.rules
-  const isHostContext = rules.voteRule === 'host-decides' || state.pkCandidateIds != null
-  if (!isHostContext) return state
 
   const candidates = voteCandidates(state)
   const counts = sanitizeCounts(candidates, {})

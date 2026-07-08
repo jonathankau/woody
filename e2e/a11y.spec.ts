@@ -99,10 +99,8 @@ async function eliminateUntilResults(
   for (let guard = 0; guard < 6; guard++) {
     if (await page.getByTestId('results-winner').isVisible().catch(() => false)) return
 
-    // Vote screen: bump the first candidate and submit.
-    const firstInc = page.locator('[data-testid^="vote-stepper-inc-"]').first()
-    await firstInc.click()
-    await page.getByTestId('vote-submit').click()
+    // Vote screen: enter the first candidate as the voted-off player.
+    await page.locator('[data-testid^="vote-eliminate-"]').first().click()
 
     if (await page.getByTestId('baiban-incorrect').isVisible().catch(() => false)) {
       await page.getByTestId('baiban-incorrect').click()

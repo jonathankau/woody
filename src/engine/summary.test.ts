@@ -5,10 +5,10 @@ import { presetById } from './presets'
 
 describe('ruleSummary', () => {
   it('matches the spec example for a 7-player Woody Standard game', () => {
-    // 7 players -> 2 undercovers, 1 Baiban, guess-on-elimination, PK.
+    // 7 players -> 2 undercovers, 1 Baiban, guess-on-elimination.
     const cfg = presetConfig('woody-standard', 7)
     expect(ruleSummary(cfg)).toBe(
-      '7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian · Baiban guesses if eliminated · ties go to PK',
+      '7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian · Baiban guesses if eliminated',
     )
   })
 
@@ -32,15 +32,14 @@ describe('ruleSummary', () => {
     expect(s).toContain('Baiban wins if it outlasts undercovers')
   })
 
-  it('describes parity threshold and tie variants', () => {
+  it('describes parity threshold', () => {
     const cfg = customConfig(6, {
       undercoverWinRule: 'parity-plus-one',
-      tieRule: 'no-elimination',
       baibanCount: 0,
     })
     const s = ruleSummary(cfg)
     expect(s).toContain('civilians = undercovers + 1')
-    expect(s).toContain('ties eliminate nobody')
+    expect(s).not.toContain('tie')
   })
 })
 

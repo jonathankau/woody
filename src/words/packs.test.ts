@@ -17,9 +17,15 @@ describe('built-in pack data integrity', () => {
     ])
   })
 
-  it('has at least 200 pairs total', () => {
+  it('has exactly 250 pairs per pack', () => {
+    for (const pack of builtinPacks) {
+      expect(pack.pairs).toHaveLength(250)
+    }
+  })
+
+  it('has at least 1500 pairs total', () => {
     const total = builtinPacks.reduce((sum, p) => sum + p.pairs.length, 0)
-    expect(total).toBeGreaterThanOrEqual(200)
+    expect(total).toBeGreaterThanOrEqual(1500)
   })
 
   it('gives every pack a name and description', () => {
@@ -27,12 +33,6 @@ describe('built-in pack data integrity', () => {
       expect(pack.name.length).toBeGreaterThan(0)
       expect(pack.description.length).toBeGreaterThan(0)
       expect(pack.builtIn).toBe(true)
-    }
-  })
-
-  it('gives every pack a non-trivial number of pairs', () => {
-    for (const pack of builtinPacks) {
-      expect(pack.pairs.length).toBeGreaterThanOrEqual(20)
     }
   })
 

@@ -37,7 +37,7 @@ export function createGame(config: GameConfig, pair: { id: string; packId: strin
 export function reduce(state: GameState, action: GameAction, rng: Rng): GameState
 
 /** One-line rule summary for setup + results header, e.g.
- *  "7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian · Baiban guesses if eliminated · ties go to PK". */
+ *  "7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian · Baiban guesses if eliminated". */
 export function ruleSummary(config: GameConfig): string
 
 /** Data for the How to Play win chart, generated from the same rule table. */
@@ -57,7 +57,9 @@ export function startingSpeaker(state: GameState): Player | null
 - Baiban never starts: starting speaker selection excludes Baiban in every rule, including
   rotate (skip) and host-chooses (reject Baiban id -> state unchanged).
 - Rotate rule advances `rotationIndex` each round, skipping dead and Baiban players.
-- `SUBMIT_VOTE` applies the configured vote rule:
+- `HOST_ELIMINATE` is the production UI path: after the group votes out loud, the host enters the
+  eliminated player id or `null` for no elimination.
+- `SUBMIT_VOTE` is the counted-vote engine path for simulations and future UI variants:
   - plurality: unique max -> eliminate; tied max -> tie rule.
   - majority: unique max AND max > floor(aliveCount / 2) -> eliminate, else outcome 'no-majority', no elimination.
   - tie rules: 'pk-revote' -> phase back to 'vote' with pkCandidateIds = tied ids (record outcome 'tie');

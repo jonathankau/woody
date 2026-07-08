@@ -32,22 +32,10 @@ function baibanPhrase(rules: RuleSet): string | null {
   }
 }
 
-/** Human phrase for the tie rule. */
-function tiePhrase(rules: RuleSet): string {
-  switch (rules.tieRule) {
-    case 'pk-revote':
-      return 'ties go to PK'
-    case 'no-elimination':
-      return 'ties eliminate nobody'
-    case 'host-decides':
-      return 'host breaks ties'
-  }
-}
-
 /**
  * One-line rule summary for the setup and results header, e.g.
  * "7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian ·
- *  Baiban guesses if eliminated · ties go to PK".
+ *  Baiban guesses if eliminated".
  */
 export function ruleSummary(config: GameConfig): string {
   const { rules } = config
@@ -60,7 +48,6 @@ export function ruleSummary(config: GameConfig): string {
   segments.push(winThresholdPhrase(rules, playerCount))
   const baiban = baibanPhrase(rules)
   if (baiban) segments.push(baiban)
-  segments.push(tiePhrase(rules))
   return segments.join(' · ')
 }
 

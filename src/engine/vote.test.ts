@@ -87,6 +87,13 @@ describe('host-decides vote rule', () => {
     expect(next.lastVoteOutcome).toBe('host-decided')
   })
 
+  it('HOST_ELIMINATE records the result under counted vote rules too', () => {
+    const s = fiveWay({ voteRule: 'plurality' })
+    const next = reduce(s, { type: 'HOST_ELIMINATE', playerId: 'p5' }, rng)
+    expect(next.lastElimination?.playerId).toBe('p5')
+    expect(next.lastVoteOutcome).toBe('host-decided')
+  })
+
   it('HOST_ELIMINATE null eliminates nobody', () => {
     const s = fiveWay({ voteRule: 'host-decides' })
     const next = reduce(s, { type: 'HOST_ELIMINATE', playerId: null }, rng)

@@ -2,9 +2,7 @@ import type {
   BaibanRule,
   RuleSet,
   StartingSpeakerRule,
-  TieRule,
   UndercoverWinRule,
-  VoteRule,
 } from '../../engine'
 
 /**
@@ -81,32 +79,6 @@ export function AdvancedSettings({
             <option value="last-two-or-three">Last 3 (last 2 in small games)</option>
             <option value="one-civilian-left">Only 1 civilian left</option>
             <option value="parity-plus-one">Civilians = undercovers + 1</option>
-          </select>
-        </Field>
-
-        <Field label="Vote rule" htmlFor="adv-vote">
-          <select
-            id="adv-vote"
-            className="setup-select"
-            value={rules.voteRule}
-            onChange={(e) => onPatchRules({ voteRule: e.target.value as VoteRule })}
-          >
-            <option value="plurality">Plurality eliminates</option>
-            <option value="majority">Majority required</option>
-            <option value="host-decides">Host decides</option>
-          </select>
-        </Field>
-
-        <Field label="Tie rule" htmlFor="adv-tie">
-          <select
-            id="adv-tie"
-            className="setup-select"
-            value={rules.tieRule}
-            onChange={(e) => onPatchRules({ tieRule: e.target.value as TieRule })}
-          >
-            <option value="pk-revote">PK revote</option>
-            <option value="no-elimination">No elimination</option>
-            <option value="host-decides">Host decides</option>
           </select>
         </Field>
 

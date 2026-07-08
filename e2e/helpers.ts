@@ -30,9 +30,6 @@ export interface SetupOptions {
   playerCount: number
   /** Preset card label as shown in setup (defaults to Woody Standard). */
   preset?: 'Woody Standard' | 'Classic Wo Di' | 'Undercover / Mr. White'
-  /** Advanced-settings overrides applied before starting. */
-  voteRule?: 'plurality' | 'majority' | 'host-decides'
-  tieRule?: 'pk-revote' | 'no-elimination' | 'host-decides'
   /** Custom player names; defaults to the app's "Player N" names. */
   names?: string[]
 }
@@ -88,18 +85,6 @@ export async function configureAndStart(
 
   if (opts.preset && opts.preset !== 'Woody Standard') {
     await page.getByRole('radio', { name: new RegExp(opts.preset) }).click()
-  }
-
-  if (opts.voteRule || opts.tieRule) {
-    // The advanced panel is a <details>; open it before touching selects.
-    const advanced = page.getByText('Advanced settings', { exact: true })
-    await advanced.click()
-    if (opts.voteRule) {
-      await page.getByLabel('Vote rule').selectOption(opts.voteRule)
-    }
-    if (opts.tieRule) {
-      await page.getByLabel('Tie rule').selectOption(opts.tieRule)
-    }
   }
 
   await page.getByTestId('setup-start').click()
@@ -180,24 +165,23 @@ function inferTeams(
 export async function advanceToVote(page: Page): Promise<void> {
   await page.getByTestId('clue-order-continue').click()
   await page.getByTestId('discussion-vote').click()
-  await expect(page.getByTestId('vote-submit')).toBeVisible()
+  await expect(page.getByTestId('vote-no-elimination')).toBeVisible()
 }
 
 /**
  * Map candidate names (as shown on the current vote screen) to their engine
- * player ids by reading each stepper row's data-testid. Only alive candidates
+ * player ids by reading each result button's data-testid. Only alive candidates
  * (or PK candidates) appear.
  */
-export async function voteStepperIdByName(page: Page): Promise<Map<string, string>> {
-  const rows = page.locator('.vote-row')
-  const count = await rows.count()
+export async function voteCandidateIdByName(page: Page): Promise<Map<string, string>> {
+  const buttons = page.locator('[data-testid^="vote-eliminate-"]')
+  const count = await buttons.count()
   const map = new Map<string, string>()
   for (let i = 0; i < count; i++) {
-    const row = rows.nth(i)
-    const name = (await row.locator('.vote-name').textContent())?.trim() ?? ''
-    const incTestId =
-      (await row.locator('[data-testid^="vote-stepper-inc-"]').getAttribute('data-testid')) ?? ''
-    const id = incTestId.replace('vote-stepper-inc-', '')
+    const button = buttons.nth(i)
+    const name = (await button.textContent())?.trim() ?? ''
+    const testId = (await button.getAttribute('data-testid')) ?? ''
+    const id = testId.replace('vote-eliminate-', '')
     if (name && id) map.set(name, id)
   }
   return map
@@ -211,11 +195,10 @@ export async function voteStepperIdByName(page: Page): Promise<Map<string, strin
  */
 export async function playRoundVotingOut(page: Page, targetName: string): Promise<void> {
   await advanceToVote(page)
-  const ids = await voteStepperIdByName(page)
+  const ids = await voteCandidateIdByName(page)
   const id = ids.get(targetName)
   if (!id) throw new Error(`No vote candidate named "${targetName}". Candidates: ${[...ids.keys()].join(', ')}`)
-  await page.getByTestId(`vote-stepper-inc-${id}`).click()
-  await page.getByTestId('vote-submit').click()
+  await page.getByTestId(`vote-eliminate-${id}`).click()
 }
 
 /** Advance a fresh round's reveal-less loop: clue-order -> discussion -> vote. */

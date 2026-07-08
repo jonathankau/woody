@@ -48,11 +48,11 @@ test('refresh during vote phase resumes on the vote screen', async ({ page }) =>
   await walkRevealsAndBuildRoster(page)
   await advanceToVote(page)
 
-  await expect(page.getByTestId('vote-submit')).toBeVisible()
+  await expect(page.getByTestId('vote-no-elimination')).toBeVisible()
   await page.reload()
 
   // Vote phase is not privacy-sensitive; it resumes in place.
-  await expect(page.getByTestId('vote-submit')).toBeVisible()
+  await expect(page.getByTestId('vote-no-elimination')).toBeVisible()
 })
 
 /**

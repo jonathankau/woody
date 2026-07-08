@@ -4,7 +4,7 @@ import {
   configureAndStart,
   walkRevealsAndBuildRoster,
   advanceToVote,
-  voteStepperIdByName,
+  voteCandidateIdByName,
 } from './helpers'
 
 /**
@@ -22,10 +22,9 @@ test('Mr. White preset -> correct guess is a Baiban win', async ({ page }) => {
   expect(baiban).toBeTruthy()
 
   await advanceToVote(page)
-  const ids = await voteStepperIdByName(page)
+  const ids = await voteCandidateIdByName(page)
   const baibanId = ids.get(baiban!.name)!
-  await page.getByTestId(`vote-stepper-inc-${baibanId}`).click()
-  await page.getByTestId('vote-submit').click()
+  await page.getByTestId(`vote-eliminate-${baibanId}`).click()
 
   // Eliminating Mr. White triggers the guess prompt; host taps Correct.
   await expect(page.getByTestId('baiban-correct')).toBeVisible()

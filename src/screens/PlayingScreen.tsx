@@ -140,7 +140,6 @@ function PhaseView({
       return (
         <VoteScreen
           state={state}
-          onSubmit={(counts) => dispatch({ type: 'SUBMIT_VOTE', counts })}
           onHostEliminate={(playerId) => dispatch({ type: 'HOST_ELIMINATE', playerId })}
         />
       )

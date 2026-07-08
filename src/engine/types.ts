@@ -197,12 +197,11 @@ export type GameAction =
   /** Discussion done; move to vote entry. */
   | { type: 'BEGIN_VOTE' }
   /**
-   * Host submits public tallies (plurality/majority vote rules, and PK
-   * revotes). Keys must be alive player ids — only `pkCandidateIds` when a PK
-   * revote is active.
+   * Counted-vote engine path (used by simulations and tests). Keys must be
+   * alive player ids — only `pkCandidateIds` when a PK revote is active.
    */
   | { type: 'SUBMIT_VOTE'; counts: Record<string, number> }
-  /** Host-decides vote/tie rule: host names the eliminated player, or nobody. */
+  /** Production UI path: host enters who was eliminated, or nobody. */
   | { type: 'HOST_ELIMINATE'; playerId: string | null }
   /** Host adjudicates the Baiban's verbal guess. */
   | { type: 'RESOLVE_BAIBAN_GUESS'; correct: boolean }
