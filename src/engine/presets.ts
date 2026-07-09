@@ -2,9 +2,9 @@ import type { Preset, PresetId, RuleSet } from './types'
 
 /**
  * Recommended role counts per the spec:
- *   4-6 players  -> 1 undercover, 0 Baiban
- *   7-9 players  -> 2 undercovers, 1 Baiban
- *   10-12 players -> 3 undercovers, 1 Baiban
+ *   4-6 players  -> 1 undercover, 0 Whiteboard
+ *   7-9 players  -> 2 undercovers, 1 Whiteboard
+ *   10-12 players -> 3 undercovers, 1 Whiteboard
  *
  * For counts outside 4-12 we still return a sensible clamp so callers never
  * crash; `validateConfig` is responsible for rejecting out-of-range counts.
@@ -39,10 +39,10 @@ function baseRules(playerCount: number): Pick<RuleSet, 'undercoverCount' | 'baib
 const woodyStandard: Preset = {
   id: 'woody-standard',
   name: 'Woody Standard',
-  tagline: 'Modern default: Baiban gets one guess if voted off.',
+  tagline: 'Modern variant: Whiteboard gets one guess if voted off.',
   details: [
     'Undercovers win when only 1 civilian remains.',
-    'Civilians must eliminate undercovers and Baiban.',
+    'Civilians must eliminate undercovers and Whiteboard.',
     'Clues can be loose, funny, or strategic.',
   ],
   rules(playerCount: number): RuleSet {
@@ -62,10 +62,10 @@ const woodyStandard: Preset = {
 const classicWodi: Preset = {
   id: 'classic-wodi',
   name: 'Classic Wo Di',
-  tagline: 'Original-style: stricter clues and last-3 pressure.',
+  tagline: 'Original-style: stricter clues and source-aligned endgame pressure.',
   details: [
-    'Undercovers win at last 3 players (last 2 in small games).',
-    'Baiban wins by outlasting every undercover.',
+    'Undercovers win at last 3 players for 7+ players; at last 2 for 6 or fewer.',
+    'Whiteboard wins by outlasting every undercover.',
     'Clues should be true about your word.',
   ],
   rules(playerCount: number): RuleSet {
@@ -84,12 +84,12 @@ const classicWodi: Preset = {
 
 const mrWhite: Preset = {
   id: 'mr-white',
-  name: 'Undercover / Mr. White',
-  tagline: 'App-style: Mr. White joins the infiltrator team.',
+  name: 'Undercover / Whiteboard',
+  tagline: 'App-style: Whiteboard joins the infiltrator team.',
   details: [
-    'Undercovers and Mr. White can win together.',
+    'Undercovers and Whiteboard can win together.',
     'Infiltrators win when only 1 civilian remains.',
-    'Mr. White gets one guess if voted off.',
+    'Whiteboard gets one guess if voted off.',
   ],
   rules(playerCount: number): RuleSet {
     return {
@@ -105,7 +105,7 @@ const mrWhite: Preset = {
   },
 }
 
-export const PRESETS: Preset[] = [woodyStandard, classicWodi, mrWhite]
+export const PRESETS: Preset[] = [classicWodi, woodyStandard, mrWhite]
 
 export function presetById(id: PresetId): Preset {
   const preset = PRESETS.find((p) => p.id === id)

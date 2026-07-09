@@ -36,7 +36,7 @@ function infiltratorThresholdMet(
     case 'parity-plus-one':
       return t.civilians <= t.undercovers + 1
     case 'last-two-or-three': {
-      const threshold = startingPlayerCount >= 6 ? 3 : 2
+      const threshold = startingPlayerCount >= 7 ? 3 : 2
       return t.total <= threshold
     }
     default:
@@ -48,10 +48,10 @@ function infiltratorThresholdMet(
  * Determine the winner (if any) given the current alive players and rules.
  *
  * Win check order (authoritative, from CONTRACTS.md):
- *   1. Baiban 'survive-after-undercovers': all undercovers out + Baiban alive -> 'baiban'.
- *   2. Civilians: all undercovers out AND (no Baiban in game or Baiban out) -> 'civilians'.
+ *   1. Whiteboard 'survive-after-undercovers': all undercovers out + Whiteboard alive -> 'baiban'.
+ *   2. Civilians: all undercovers out AND (no Whiteboard in game or Whiteboard out) -> 'civilians'.
  *   3. Undercover/infiltrator win per undercoverWinRule:
- *        - infiltratorsWinTogether: an alive Baiban OR alive undercover counts;
+ *        - infiltratorsWinTogether: an alive Whiteboard OR alive undercover counts;
  *          winner 'infiltrators'.
  *        - else: requires an alive undercover; winner 'undercovers'.
  */
@@ -61,7 +61,7 @@ export function checkWinner(state: GameState): Winner | null {
   const baibanInGame = rules.baibanCount === 1
   const startingPlayerCount = state.config.playerNames.length
 
-  // 1. Baiban survive-after-undercovers.
+  // 1. Whiteboard survive-after-undercovers.
   if (rules.baibanRule === 'survive-after-undercovers' && t.undercovers === 0 && t.baibanAlive) {
     return 'baiban'
   }
@@ -75,7 +75,7 @@ export function checkWinner(state: GameState): Winner | null {
   // 3. Undercover / infiltrator threshold.
   if (infiltratorThresholdMet(rules, t, startingPlayerCount)) {
     if (rules.infiltratorsWinTogether) {
-      // An alive undercover OR an alive Baiban satisfies the infiltrator win.
+      // An alive undercover OR an alive Whiteboard satisfies the infiltrator win.
       if (t.undercovers > 0 || t.baibanAlive) return 'infiltrators'
     } else if (t.undercovers > 0) {
       return 'undercovers'

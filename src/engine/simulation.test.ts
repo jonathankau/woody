@@ -96,7 +96,7 @@ describe('full game: Classic Wo Di -> baiban survival win', () => {
   })
 })
 
-describe('full game: Mr. White -> baiban guess win', () => {
+describe('full game: Whiteboard -> baiban guess win', () => {
   it('a correct baiban guess ends the game as a baiban win', () => {
     const cfg = presetConfig('mr-white', 7)
     let s = createGame(cfg, PAIR, seededRng(14))

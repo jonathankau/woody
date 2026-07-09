@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { recommendedRoleCounts, recommendedRoleCountsWithBaiban, PRESETS } from './presets'
+import { recommendedRoleCounts, recommendedRoleCountsWithBaiban, PRESETS, presetById } from './presets'
 import { validateConfig } from './validate'
 import { customConfig, names, presetConfig } from './testutils'
 import type { GameConfig } from './types'
@@ -21,7 +21,7 @@ describe('recommendedRoleCounts', () => {
     }
   })
 
-  it('moves the Baiban slot to undercovers when Baiban is disabled', () => {
+  it('moves the Whiteboard slot to undercovers when Whiteboard is disabled', () => {
     expect(recommendedRoleCountsWithBaiban(8, 1)).toEqual({
       undercoverCount: 2,
       baibanCount: 1,
@@ -35,7 +35,7 @@ describe('recommendedRoleCounts', () => {
 
 describe('PRESETS', () => {
   it('exposes the three presets with stable ids', () => {
-    expect(PRESETS.map((p) => p.id)).toEqual(['woody-standard', 'classic-wodi', 'mr-white'])
+    expect(PRESETS.map((p) => p.id)).toEqual(['classic-wodi', 'woody-standard', 'mr-white'])
   })
 
   it('gives every preset concrete setup details', () => {
@@ -45,7 +45,7 @@ describe('PRESETS', () => {
   })
 
   it('woody-standard: guess baiban, one-civilian, not infiltrators, PK', () => {
-    const r = PRESETS[0].rules(8)
+    const r = presetById('woody-standard').rules(8)
     expect(r.baibanRule).toBe('guess-on-elimination')
     expect(r.undercoverWinRule).toBe('one-civilian-left')
     expect(r.infiltratorsWinTogether).toBe(false)
@@ -53,14 +53,14 @@ describe('PRESETS', () => {
   })
 
   it('classic-wodi: survive baiban, last-two-or-three, strict clues', () => {
-    const r = PRESETS[1].rules(8)
+    const r = presetById('classic-wodi').rules(8)
     expect(r.baibanRule).toBe('survive-after-undercovers')
     expect(r.undercoverWinRule).toBe('last-two-or-three')
     expect(r.strictClues).toBe(true)
   })
 
   it('mr-white: infiltrators win together, one-civilian', () => {
-    const r = PRESETS[2].rules(8)
+    const r = presetById('mr-white').rules(8)
     expect(r.infiltratorsWinTogether).toBe(true)
     expect(r.undercoverWinRule).toBe('one-civilian-left')
   })
@@ -131,7 +131,7 @@ describe('validateConfig', () => {
   it('rejects baibanCount other than 0 or 1', () => {
     const cfg = customConfig(6, {})
     ;(cfg.rules as unknown as { baibanCount: number }).baibanCount = 2
-    expect(validateConfig(cfg).join(' ')).toMatch(/Baiban count must be 0 or 1/)
+    expect(validateConfig(cfg).join(' ')).toMatch(/Whiteboard count must be 0 or 1/)
   })
 
   it('requires at least one word pack', () => {

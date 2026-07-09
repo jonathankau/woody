@@ -44,7 +44,7 @@ export function AdvancedSettings({
 
         <div className="setup-field setup-field-inline">
           <label className="setup-label" htmlFor="adv-baiban">
-            Baiban in play
+            Whiteboard in play
           </label>
           <input
             id="adv-baiban"
@@ -55,7 +55,7 @@ export function AdvancedSettings({
         </div>
 
         {rules.baibanCount === 1 && (
-          <Field label="Baiban rule" htmlFor="adv-baiban-rule">
+          <Field label="Whiteboard rule" htmlFor="adv-baiban-rule">
             <select
               id="adv-baiban-rule"
               className="setup-select"

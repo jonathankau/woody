@@ -5,8 +5,8 @@ import { alivePlayers, startingSpeaker } from '../engine'
 /**
  * Clue-order screen: shows the speaking order with the starting speaker
  * highlighted. For the host-chooses rule the host taps a player to set the
- * starter. To avoid leaking the Baiban's identity, we offer every alive player;
- * the engine silently rejects a Baiban pick (state unchanged), and we surface a
+ * starter. To avoid leaking the Whiteboard's identity, we offer every alive player;
+ * the engine silently rejects a Whiteboard pick (state unchanged), and we surface a
  * neutral prompt to try a different starter.
  */
 export function ClueOrderScreen({
@@ -24,8 +24,8 @@ export function ClueOrderScreen({
   const alive = alivePlayers(state)
   // The player the host last tapped. After the parent re-renders with the
   // authoritative order, if the tapped player is NOT the starter the engine
-  // rejected it (a Baiban pick) and we show a neutral prompt — never revealing
-  // who the Baiban is.
+  // rejected it (a Whiteboard pick) and we show a neutral prompt — never revealing
+  // who the Whiteboard is.
   const [attemptedPick, setAttemptedPick] = useState<string | null>(null)
 
   const byId = new Map(state.players.map((p) => [p.id, p]))

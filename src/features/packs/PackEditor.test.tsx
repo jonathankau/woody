@@ -43,6 +43,22 @@ describe('PackEditor listing', () => {
     expect(screen.getByText('General Mix')).toBeInTheDocument()
     expect(screen.getAllByText('Built-in').length).toBe(6)
   })
+
+  it('opens a searchable review view for built-in packs', async () => {
+    const user = userEvent.setup()
+    renderEditor()
+
+    const card = screen.getByText('Food & Going Out').closest('li')!
+    await user.click(within(card).getByRole('button', { name: 'Review' }))
+
+    expect(screen.getByText('Review Food & Going Out')).toBeInTheDocument()
+    expect(screen.getByLabelText('Search pairs')).toBeInTheDocument()
+    expect(screen.getByText(/250 pairs/)).toBeInTheDocument()
+
+    await user.type(screen.getByLabelText('Search pairs'), 'boba')
+    expect(screen.getAllByText(/boba cafe/i).length).toBeGreaterThan(0)
+    expect(screen.queryByText(/dessert run/i)).not.toBeInTheDocument()
+  })
 })
 
 describe('PackEditor create', () => {

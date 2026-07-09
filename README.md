@@ -3,16 +3,16 @@
 A one-phone party word game inspired by 谁是卧底 (Wo Di / "Who's the Undercover").
 
 Civilians all get the same word. Undercovers get a related-but-different word. One
-player — the Baiban — gets nothing and has to bluff. Pass the phone for private
+player — the Whiteboard — gets nothing and has to bluff. Pass the phone for private
 reveals, give clues, discuss, vote in the open, and figure out who's faking.
 
 ## Play
 
 - 4–12 players, one phone, no accounts, no internet needed after load.
-- Three presets: **Woody Standard**, **Classic Wo Di**, and **Undercover / Mr. White**,
-  plus advanced overrides for role counts, Baiban behavior, and strict clues.
+- Three presets: **Classic Wo Di**, **Woody Standard**, and **Undercover / Whiteboard**,
+  plus advanced overrides for role counts, Whiteboard behavior, and strict clues.
 - Clue order is randomized once per game, stays stable across rounds, and never
-  starts with Baiban.
+  starts with Whiteboard.
 - Six built-in word packs with 250 pairs each, plus a custom pack editor with
   JSON import/export.
 - Game state persists across refresh and sleep; a refresh can never leak another

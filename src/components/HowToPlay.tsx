@@ -78,7 +78,7 @@ export function HowToPlay({
             <h3 className="howto-section-title">Roles</h3>
             <p>
               Civilians all share the same word. Undercovers share a related but
-              different word. The Baiban (blank / Mr. White) gets no word at all.
+              different word. The Whiteboard gets no word at all.
               You only ever see your word, never your role, so read the room.
             </p>
             <RoleOverviewDiagram />
@@ -100,7 +100,7 @@ export function HowToPlay({
               Each round: give one clue about your word (never say the word
               itself), discuss who feels off, then take a public vote. The clue
               order is random once per game and stays the same as players leave;
-              Baiban never starts the clues.
+              Whiteboard never starts the clues.
             </p>
             <RoundLoopDiagram />
           </section>
@@ -116,10 +116,10 @@ export function HowToPlay({
           </section>
 
           <section className="howto-section">
-            <h3 className="howto-section-title">Baiban</h3>
+            <h3 className="howto-section-title">Whiteboard</h3>
             <p>
-              The Baiban has no word and has to bluff purely on vibes. Depending
-              on the rules, a voted-out Baiban gets one shot to guess the
+              The Whiteboard has no word and has to bluff purely on vibes. Depending
+              on the rules, a voted-out Whiteboard gets one shot to guess the
               civilians&apos; word out loud, or wins by simply outlasting every
               undercover.
             </p>

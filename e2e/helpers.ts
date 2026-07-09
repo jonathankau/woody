@@ -5,12 +5,12 @@ import { expect, type Page } from '@playwright/test'
  *
  * The game is random (roles, words, which side of a pair is civilian vs
  * undercover) but *fully observable*: during the private reveal each player's
- * word is shown on screen, and the Baiban sees a no-word notice. So we walk the
+ * word is shown on screen, and the Whiteboard sees a no-word notice. So we walk the
  * reveal, capture each player's word, and then infer teams purely from word
  * frequency:
  *   - the majority word  -> civilians
  *   - the minority word  -> undercovers
- *   - no word (Baiban notice) -> baiban
+ *   - no word (Whiteboard notice) -> baiban
  * That lets every downstream test vote deterministically to force an outcome
  * without ever importing engine internals.
  */
@@ -21,15 +21,15 @@ export interface RosterEntry {
   /** 0-based position in the reveal order (== players-array index). */
   index: number
   name: string
-  /** The player's word, or null for the Baiban. */
+  /** The player's word, or null for the Whiteboard. */
   word: string | null
   team: Team
 }
 
 export interface SetupOptions {
   playerCount: number
-  /** Preset card label as shown in setup (defaults to Woody Standard). */
-  preset?: 'Woody Standard' | 'Classic Wo Di' | 'Undercover / Mr. White'
+  /** Preset card label as shown in setup (defaults to Classic Wo Di). */
+  preset?: 'Woody Standard' | 'Classic Wo Di' | 'Undercover / Whiteboard'
   /** Custom player names; defaults to the app's "Player N" names. */
   names?: string[]
 }
@@ -83,7 +83,7 @@ export async function configureAndStart(
     }
   }
 
-  if (opts.preset && opts.preset !== 'Woody Standard') {
+  if (opts.preset) {
     await page.getByRole('radio', { name: new RegExp(opts.preset) }).click()
   }
 
@@ -117,7 +117,7 @@ export async function walkRevealsAndBuildRoster(page: Page): Promise<RosterEntry
 
     await page.getByTestId('reveal-pass-show').click()
 
-    // Now the word (or the Baiban "—" no-word marker) is visible.
+    // Now the word (or the Whiteboard "—" no-word marker) is visible.
     const wordEl = page.getByTestId('reveal-word')
     await expect(wordEl).toBeVisible()
     const isBaiban = (await wordEl.getAttribute('class'))?.includes('reveal-show-noword')

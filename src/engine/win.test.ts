@@ -80,8 +80,9 @@ describe('Classic Wo Di win conditions', () => {
     expect(checkWinner(s)).toBe('baiban')
   })
 
-  it('undercover wins at last 3 for 6+ starting players', () => {
+  it('undercover does not win at last 3 for 6 starting players', () => {
     // 6 starting players, reduced to 3 alive with an undercover present.
+    // Classic source-aligned threshold is last 2 until 7 players.
     const s = makeState({
       players: [
         { id: 'p1', role: 'civilian' },
@@ -94,10 +95,27 @@ describe('Classic Wo Di win conditions', () => {
       rules: { ...rules, baibanCount: 0 },
       phase: 'resolution',
     })
+    expect(checkWinner(s)).toBeNull()
+  })
+
+  it('undercover wins at last 3 for 7+ starting players', () => {
+    const s = makeState({
+      players: [
+        { id: 'p1', role: 'civilian' },
+        { id: 'p2', role: 'civilian', eliminated: true },
+        { id: 'p3', role: 'civilian', eliminated: true },
+        { id: 'p4', role: 'civilian' },
+        { id: 'p5', role: 'undercover' },
+        { id: 'p6', role: 'civilian', eliminated: true },
+        { id: 'p7', role: 'civilian', eliminated: true },
+      ],
+      rules: { ...rules, baibanCount: 0 },
+      phase: 'resolution',
+    })
     expect(checkWinner(s)).toBe('undercovers')
   })
 
-  it('undercover wins at last 2 for fewer than 6 starting players', () => {
+  it('undercover wins at last 2 for fewer than 7 starting players', () => {
     const s = makeState({
       players: [
         { id: 'p1', role: 'civilian' },
@@ -113,7 +131,7 @@ describe('Classic Wo Di win conditions', () => {
   })
 })
 
-describe('Mr. White / infiltrators win conditions', () => {
+describe('Whiteboard / infiltrators win conditions', () => {
   const rules = {
     baibanRule: 'guess-on-elimination' as const,
     undercoverWinRule: 'one-civilian-left' as const,

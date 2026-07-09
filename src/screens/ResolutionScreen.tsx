@@ -3,7 +3,7 @@ import type { GameState, Role } from '../engine'
 const ROLE_LABEL: Record<Role, string> = {
   civilian: 'a Civilian',
   undercover: 'an Undercover',
-  baiban: 'the Baiban',
+  baiban: 'the Whiteboard',
 }
 
 function noElimReason(outcome: GameState['lastVoteOutcome']): string {

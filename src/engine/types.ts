@@ -14,13 +14,13 @@ export type Role = 'civilian' | 'undercover' | 'baiban'
 
 export type PresetId = 'woody-standard' | 'classic-wodi' | 'mr-white'
 
-/** What happens with the Baiban (blank/Mr. White) player. */
+/** What happens with the Whiteboard player. */
 export type BaibanRule =
-  /** Baiban gets one verbal guess at the civilian word when eliminated. */
+  /** Whiteboard gets one verbal guess at the civilian word when eliminated. */
   | 'guess-on-elimination'
-  /** Baiban wins immediately if all undercovers are out while Baiban is alive. */
+  /** Whiteboard wins immediately if all undercovers are out while Whiteboard is alive. */
   | 'survive-after-undercovers'
-  /** No special Baiban behavior beyond having no word. */
+  /** No special Whiteboard behavior beyond having no word. */
   | 'off'
 
 export type UndercoverWinRule =
@@ -49,24 +49,24 @@ export type TieRule =
   | 'host-decides'
 
 export type StartingSpeakerRule =
-  /** Random alive non-Baiban player. */
+  /** Random alive non-Whiteboard player. */
   | 'random'
-  /** Host picks the starting speaker on the clue-order screen (never Baiban). */
+  /** Host picks the starting speaker on the clue-order screen (never Whiteboard). */
   | 'host-chooses'
-  /** Rotate through alive non-Baiban players round to round. */
+  /** Rotate through alive non-Whiteboard players round to round. */
   | 'rotate'
 
 export interface RuleSet {
   undercoverCount: number
-  /** V1 supports 0 or 1 Baiban. */
+  /** V1 supports 0 or 1 Whiteboard. */
   baibanCount: 0 | 1
   baibanRule: BaibanRule
   undercoverWinRule: UndercoverWinRule
   /**
-   * When true (Undercover / Mr. White preset), Baiban counts as an
-   * infiltrator: an alive Baiban satisfies the undercover win condition and
+   * When true (Undercover / Whiteboard preset), Whiteboard counts as an
+   * infiltrator: an alive Whiteboard satisfies the undercover win condition and
    * shares the win. When false, the undercover win requires an alive
-   * undercover, and civilians must also eliminate Baiban to win.
+   * undercover, and civilians must also eliminate Whiteboard to win.
    */
   infiltratorsWinTogether: boolean
   voteRule: VoteRule
@@ -88,7 +88,7 @@ export interface Player {
   id: string
   name: string
   role: Role
-  /** The player's word; null for Baiban. */
+  /** The player's word; null for Whiteboard. */
   word: string | null
   eliminated: boolean
   /** Round the player was eliminated in (1-based), if eliminated. */
@@ -116,7 +116,7 @@ export type Phase =
   | 'vote'
   /** Round outcome: who was eliminated (or nobody) and their role. */
   | 'resolution'
-  /** Host adjudicates the eliminated Baiban's verbal guess. */
+  /** Host adjudicates the eliminated Whiteboard's verbal guess. */
   | 'baiban-guess'
   /** Game over: full roles and words revealed. */
   | 'results'
@@ -134,7 +134,7 @@ export interface Preset {
 
 /** One row of the How to Play win chart. */
 export interface WinChartRow {
-  team: 'Civilians' | 'Undercovers' | 'Infiltrators' | 'Baiban'
+  team: 'Civilians' | 'Undercovers' | 'Infiltrators' | 'Whiteboard'
   how: string
 }
 
@@ -177,7 +177,7 @@ export interface GameState {
   votes: VoteRecord[]
   /** Restricted candidates during a PK revote, else null. */
   pkCandidateIds: string[] | null
-  /** Set while waiting on the host to adjudicate a Baiban guess. */
+  /** Set while waiting on the host to adjudicate a Whiteboard guess. */
   pendingBaibanGuessPlayerId: string | null
   /** The most recent elimination, for the resolution screen. */
   lastElimination: Elimination | null
@@ -191,7 +191,7 @@ export type GameAction =
   | { type: 'SHOW_WORD' }
   /** Player hides their word; advance to the next reveal or to clue order. */
   | { type: 'HIDE_WORD' }
-  /** Host picked the starting speaker (host-chooses rule only; never Baiban). */
+  /** Host picked the starting speaker (host-chooses rule only; never Whiteboard). */
   | { type: 'CHOOSE_STARTING_SPEAKER'; playerId: string }
   /** Legacy action for old saved flows; current UI skips straight to voting. */
   | { type: 'BEGIN_DISCUSSION' }
@@ -204,7 +204,7 @@ export type GameAction =
   | { type: 'SUBMIT_VOTE'; counts: Record<string, number> }
   /** Production UI path: host enters who was eliminated, or nobody. */
   | { type: 'HOST_ELIMINATE'; playerId: string | null }
-  /** Host adjudicates the Baiban's verbal guess. */
+  /** Host adjudicates the Whiteboard's verbal guess. */
   | { type: 'RESOLVE_BAIBAN_GUESS'; correct: boolean }
   /** Leave the resolution screen: next round, or results if the game ended. */
   | { type: 'CONTINUE' }

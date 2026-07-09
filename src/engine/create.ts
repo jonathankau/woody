@@ -6,12 +6,12 @@ import { buildSpeakingOrder, shuffle } from './helpers'
  * Create a fresh game from a validated config and a chosen word pair.
  *
  * - Assigns roles randomly: `undercoverCount` undercovers, `baibanCount`
- *   Baiban, the rest civilians.
+ *   Whiteboard, the rest civilians.
  * - Randomizes which side of the pair (`a` or `b`) is the civilian word vs the
  *   undercover word.
  * - Player ids are deterministic `p1`..`pN` in `playerNames` order.
  * - Reveal order is the players-array order (revealIndex starts at 0).
- * - Builds the round-1 speaking order and starting speaker (never Baiban),
+ * - Builds the round-1 speaking order and starting speaker (never Whiteboard),
  *   respecting `startingSpeakerRule`. For `host-chooses` the UI reorders later
  *   via CHOOSE_STARTING_SPEAKER.
  *

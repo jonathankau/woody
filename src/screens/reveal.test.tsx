@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { GameConfig, GameState } from '../engine'
-import { createGame, PRESETS } from '../engine'
+import { createGame, presetById } from '../engine'
 import { RevealPassScreen } from './RevealPassScreen'
 import { RevealShowScreen } from './RevealShowScreen'
 
@@ -14,7 +14,7 @@ function seqRng(values: number[]) {
 
 function makeGame(overrideBaiban = false): GameState {
   const names = ['Ana', 'Bo', 'Cy', 'Dee', 'Ed', 'Fi', 'Gus']
-  const rules = { ...PRESETS[0].rules(names.length), baibanCount: 1 as const }
+  const rules = { ...presetById('woody-standard').rules(names.length), baibanCount: 1 as const }
   const config: GameConfig = {
     presetId: 'woody-standard',
     rules,
@@ -44,7 +44,7 @@ describe('reveal visibility matrix', () => {
 
     const wordEl = screen.getByTestId('reveal-word')
     if (current.word === null) {
-      // Baiban: no word shown.
+      // Whiteboard: no word shown.
       expect(wordEl).toHaveTextContent('—')
       expect(screen.getByText(/You have NO word/)).toBeInTheDocument()
     } else {
@@ -55,9 +55,9 @@ describe('reveal visibility matrix', () => {
     }
   })
 
-  it('shows the Baiban no-word notice and never a word', () => {
+  it('shows the Whiteboard no-word notice and never a word', () => {
     const game = makeGame()
-    // Find a Baiban and point revealIndex at them.
+    // Find a Whiteboard and point revealIndex at them.
     const baibanIndex = game.players.findIndex((p) => p.word === null)
     expect(baibanIndex).toBeGreaterThanOrEqual(0)
     const showState: GameState = {

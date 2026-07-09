@@ -2,12 +2,12 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { VoteScreen } from './VoteScreen'
-import { createGame, PRESETS } from '../engine'
+import { createGame, presetById } from '../engine'
 import type { GameConfig, GameState, RuleSet } from '../engine'
 
 function makeGame(ruleOverrides: Partial<RuleSet> = {}, patch: Partial<GameState> = {}): GameState {
   const names = ['A', 'B', 'C', 'D']
-  const rules = { ...PRESETS[0].rules(names.length), ...ruleOverrides }
+  const rules = { ...presetById('woody-standard').rules(names.length), ...ruleOverrides }
   const config: GameConfig = {
     presetId: 'woody-standard',
     rules,

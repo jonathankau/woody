@@ -3,14 +3,14 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { App } from './App'
 import { STORAGE_KEYS } from './storage/local'
-import { createGame, PRESETS, SCHEMA_VERSION } from './engine'
+import { createGame, presetById, SCHEMA_VERSION } from './engine'
 import type { GameConfig, GameState } from './engine'
 
 function makeGame(): GameState {
   const names = ['A', 'B', 'C', 'D']
   const config: GameConfig = {
     presetId: 'woody-standard',
-    rules: PRESETS[0].rules(names.length),
+    rules: presetById('woody-standard').rules(names.length),
     playerNames: names,
     packIds: [],
   }

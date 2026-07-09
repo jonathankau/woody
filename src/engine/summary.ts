@@ -13,29 +13,29 @@ function winThresholdPhrase(rules: RuleSet, playerCount: number): string {
     case 'parity-plus-one':
       return `${side} when civilians = undercovers + 1`
     case 'last-two-or-three': {
-      const threshold = playerCount >= 6 ? 3 : 2
+      const threshold = playerCount >= 7 ? 3 : 2
       return `${side} at last ${threshold}`
     }
   }
 }
 
-/** Human phrase for the Baiban rule. */
+/** Human phrase for the Whiteboard rule. */
 function baibanPhrase(rules: RuleSet): string | null {
   if (rules.baibanCount === 0) return null
   switch (rules.baibanRule) {
     case 'guess-on-elimination':
-      return 'Baiban guesses if eliminated'
+      return 'Whiteboard guesses if eliminated'
     case 'survive-after-undercovers':
-      return 'Baiban wins if it outlasts undercovers'
+      return 'Whiteboard wins if it outlasts undercovers'
     case 'off':
-      return 'Baiban has no special power'
+      return 'Whiteboard has no special power'
   }
 }
 
 /**
  * One-line rule summary for the setup and results header, e.g.
- * "7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian ·
- *  Baiban guesses if eliminated".
+ * "7 players · 2 undercovers · 1 Whiteboard · undercover wins at 1 civilian ·
+ *  Whiteboard guesses if eliminated".
  */
 export function ruleSummary(config: GameConfig): string {
   const { rules } = config
@@ -44,7 +44,7 @@ export function ruleSummary(config: GameConfig): string {
     plural(playerCount, 'player'),
     plural(rules.undercoverCount, 'undercover'),
   ]
-  if (rules.baibanCount === 1) segments.push('1 Baiban')
+  if (rules.baibanCount === 1) segments.push('1 Whiteboard')
   segments.push(winThresholdPhrase(rules, playerCount))
   const baiban = baibanPhrase(rules)
   if (baiban) segments.push(baiban)
@@ -53,8 +53,7 @@ export function ruleSummary(config: GameConfig): string {
 
 /**
  * Rows for the How to Play win chart, generated from the rule table (not
- * hardcoded per preset). The threshold phrasing uses last-3 for the common
- * 6+ starting-player case where the count is unknown here.
+ * hardcoded per preset).
  */
 export function winChart(rules: RuleSet): WinChartRow[] {
   const rows: WinChartRow[] = []
@@ -70,11 +69,11 @@ export function winChart(rules: RuleSet): WinChartRow[] {
       how = 'Reach the point where civilians equal undercovers + 1.'
       break
     case 'last-two-or-three':
-      how = 'Survive until only the last 3 players remain (last 2 in small games).'
+      how = 'Survive until only the last 3 players remain (last 2 with 6 or fewer players).'
       break
   }
   if (infiltrators) {
-    rows.push({ team: 'Infiltrators', how: `${how} An alive Baiban counts as an infiltrator.` })
+    rows.push({ team: 'Infiltrators', how: `${how} An alive Whiteboard counts as an infiltrator.` })
   } else {
     rows.push({ team: 'Undercovers', how: `${how} At least one undercover must be alive.` })
   }
@@ -82,20 +81,20 @@ export function winChart(rules: RuleSet): WinChartRow[] {
   // Civilian win.
   const civilianHow =
     rules.baibanCount === 1 && !infiltrators
-      ? 'Eliminate every undercover and the Baiban.'
+      ? 'Eliminate every undercover and the Whiteboard.'
       : 'Eliminate every undercover.'
   rows.push({ team: 'Civilians', how: civilianHow })
 
-  // Baiban-specific rows.
+  // Whiteboard-specific rows.
   if (rules.baibanCount === 1) {
     if (rules.baibanRule === 'survive-after-undercovers') {
       rows.push({
-        team: 'Baiban',
+        team: 'Whiteboard',
         how: 'Still be alive when the last undercover is eliminated.',
       })
     } else if (rules.baibanRule === 'guess-on-elimination') {
       rows.push({
-        team: 'Baiban',
+        team: 'Whiteboard',
         how: 'Correctly guess the civilian word when eliminated.',
       })
     }

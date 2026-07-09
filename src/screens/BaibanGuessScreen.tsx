@@ -1,7 +1,7 @@
 import type { GameState } from '../engine'
 
 /**
- * The eliminated Baiban gets one verbal guess at the civilians' word. The host
+ * The eliminated Whiteboard gets one verbal guess at the civilians' word. The host
  * adjudicates with Correct / Incorrect.
  */
 export function BaibanGuessScreen({
@@ -13,14 +13,14 @@ export function BaibanGuessScreen({
 }): React.JSX.Element {
   const id = state.pendingBaibanGuessPlayerId
   const player = id ? state.players.find((p) => p.id === id) : null
-  const name = player?.name ?? 'The Baiban'
+  const name = player?.name ?? 'The Whiteboard'
 
   return (
     <section className="screen baiban-guess">
-      <h2 className="screen-title">Baiban&apos;s last shot</h2>
+      <h2 className="screen-title">Whiteboard&apos;s last shot</h2>
       <div className="card baiban-guess-card">
         <p>
-          <strong>{name}</strong> was the Baiban! They get one shot: guess the
+          <strong>{name}</strong> was the Whiteboard! They get one shot: guess the
           civilians&apos; word out loud.
         </p>
         <p className="baiban-guess-hint">Host, did they get it?</p>

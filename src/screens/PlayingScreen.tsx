@@ -18,7 +18,7 @@ const PHASE_HINT: Record<GameState['phase'], string> = {
   discussion: 'Voting',
   vote: 'Voting',
   resolution: 'Resolution',
-  'baiban-guess': 'Baiban guess',
+  'baiban-guess': 'Whiteboard guess',
   results: 'Results',
 }
 

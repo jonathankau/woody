@@ -32,11 +32,11 @@ describe('SetupScreen', () => {
     const user = userEvent.setup()
     renderSetup()
     const before = screen.getByTestId('setup-summary').textContent
-    await user.click(screen.getByRole('radio', { name: /Classic Wo Di/ }))
+    await user.click(screen.getByRole('radio', { name: /Woody Standard/ }))
     const after = screen.getByTestId('setup-summary').textContent
-    // Classic uses a different win threshold phrasing.
+    // Woody Standard uses a different win threshold phrasing.
     expect(after).not.toEqual(before)
-    expect(after).toContain('at last')
+    expect(after).toContain('at 1 civilian')
   })
 
   it('changing an advanced override changes the summary', async () => {
@@ -54,31 +54,31 @@ describe('SetupScreen', () => {
   it('auto-fills recommended counts when player count changes (no manual override)', async () => {
     const user = userEvent.setup()
     renderSetup()
-    // Default 4 players -> 1 undercover, 0 baiban.
+    // Default 4 players -> 1 undercover, 0 Whiteboard.
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 undercover')
-    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Baiban')
-    // Add players to reach 7 -> 2 undercovers, 1 baiban recommended.
+    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Whiteboard')
+    // Add players to reach 7 -> 2 undercovers, 1 Whiteboard recommended.
     await user.click(screen.getByRole('button', { name: 'Add player' }))
     await user.click(screen.getByRole('button', { name: 'Add player' }))
     await user.click(screen.getByRole('button', { name: 'Add player' }))
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('2 undercovers')
-    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Baiban')
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Whiteboard')
   })
 
-  it('rebalances undercovers when Baiban is toggled and undercovers were not overridden', async () => {
+  it('rebalances undercovers when Whiteboard is toggled and undercovers were not overridden', async () => {
     const user = userEvent.setup()
     renderSetup()
-    // 7 players -> 2 undercovers + 1 Baiban by default.
+    // 7 players -> 2 undercovers + 1 Whiteboard by default.
     for (let i = 0; i < 3; i++) {
       await user.click(screen.getByRole('button', { name: 'Add player' }))
     }
     await user.click(screen.getByText('Advanced settings'))
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('2 undercovers')
-    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Baiban')
+    expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 Whiteboard')
 
-    await user.click(screen.getByLabelText('Baiban in play'))
+    await user.click(screen.getByLabelText('Whiteboard in play'))
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('3 undercovers')
-    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Baiban')
+    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Whiteboard')
   })
 
   it('stops auto-filling counts once the host overrides them', async () => {
@@ -106,9 +106,9 @@ describe('SetupScreen', () => {
     await user.click(screen.getByText('Advanced settings'))
     const undercover = screen.getByLabelText('Undercovers') as HTMLInputElement
     await user.clear(undercover)
-    await user.click(screen.getByLabelText('Baiban in play'))
+    await user.click(screen.getByLabelText('Whiteboard in play'))
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 undercover')
-    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Baiban')
+    expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Whiteboard')
   })
 
   it('renders validation errors on start when names are duplicated', async () => {

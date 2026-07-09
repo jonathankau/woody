@@ -3,8 +3,8 @@ import { currentRevealPlayer } from '../engine'
 
 /**
  * Private word card for the current player. Word-holders see their word (never
- * their role). The Baiban sees a no-word notice (they inevitably learn they are
- * Baiban by having no word — that is per spec).
+ * their role). The Whiteboard sees a no-word notice (they inevitably learn they are
+ * Whiteboard by having no word — that is per spec).
  */
 export function RevealShowScreen({
   state,

@@ -55,14 +55,14 @@ export function validateConfig(config: GameConfig): string[] {
   }
 
   if (baibanCount !== 0 && baibanCount !== 1) {
-    errors.push('Baiban count must be 0 or 1.')
+    errors.push('Whiteboard count must be 0 or 1.')
   }
 
   const safeUndercover = Math.max(0, undercoverCount)
   const safeBaiban = baibanCount === 1 ? 1 : 0
   const civilians = count - safeUndercover - safeBaiban
   if (civilians < 2) {
-    errors.push('Roles leave fewer than 2 civilians; reduce undercovers or Baiban.')
+    errors.push('Roles leave fewer than 2 civilians; reduce undercovers or Whiteboard.')
   }
 
   return errors

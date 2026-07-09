@@ -5,14 +5,14 @@ import { HowToPlayButton } from '../components/HowToPlayButton'
 const ROLE_LABEL: Record<Role, string> = {
   civilian: 'Civilian',
   undercover: 'Undercover',
-  baiban: 'Baiban',
+  baiban: 'Whiteboard',
 }
 
 const WINNER_COPY: Record<Winner, { title: string; sub: string }> = {
   civilians: { title: 'Civilians win!', sub: 'The infiltrators got sniffed out.' },
   undercovers: { title: 'Undercovers win!', sub: 'The sneaks pulled it off.' },
-  infiltrators: { title: 'Infiltrators win!', sub: 'Undercovers and Baiban took the room.' },
-  baiban: { title: 'Baiban wins!', sub: 'The blank one played everybody.' },
+  infiltrators: { title: 'Infiltrators win!', sub: 'Undercovers and Whiteboard took the room.' },
+  baiban: { title: 'Whiteboard wins!', sub: 'The blank one played everybody.' },
 }
 
 /** Final results: winner banner + full role/word reveal for every player. */

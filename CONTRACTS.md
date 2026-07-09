@@ -27,7 +27,7 @@ export function validateConfig(config: GameConfig): string[]
 
 /** Create a fresh game: assigns roles randomly, randomizes which side of the pair is
  *  civilian vs undercover, builds reveal order (players array order), speaking order,
- *  and starting speaker (never Baiban).
+ *  and starting speaker (never Whiteboard).
  *  Initial phase: 'reveal-pass' with revealIndex 0. */
 export function createGame(config: GameConfig, pair: { id: string; packId: string; a: string; b: string }, rng: Rng): GameState
 
@@ -36,11 +36,11 @@ export function createGame(config: GameConfig, pair: { id: string; packId: strin
 export function reduce(state: GameState, action: GameAction, rng: Rng): GameState
 
 /** One-line rule summary for setup + results header, e.g.
- *  "7 players · 2 undercovers · 1 Baiban · undercover wins at 1 civilian · Baiban guesses if eliminated". */
+ *  "7 players · 2 undercovers · 1 Whiteboard · undercover wins at 1 civilian · Whiteboard guesses if eliminated". */
 export function ruleSummary(config: GameConfig): string
 
 /** Data for the How to Play win chart, generated from the same rule table. */
-export interface WinChartRow { team: 'Civilians' | 'Undercovers' | 'Infiltrators' | 'Baiban'; how: string }
+export interface WinChartRow { team: 'Civilians' | 'Undercovers' | 'Infiltrators' | 'Whiteboard'; how: string }
 export function winChart(rules: RuleSet): WinChartRow[]
 
 /** Helpers the UI may use for display. */
@@ -53,8 +53,8 @@ export function startingSpeaker(state: GameState): Player | null
 
 - Reveal: `reveal-pass` shows "Pass to [Name]" (players[revealIndex]); `SHOW_WORD` -> `reveal-show`;
   `HIDE_WORD` -> next player's `reveal-pass`, or `clue-order` after the last player.
-- Baiban never starts: starting speaker selection excludes Baiban. If eliminations would put
-  Baiban first in a later round, the next alive non-Baiban moves to the front.
+- Whiteboard never starts: starting speaker selection excludes Whiteboard. If eliminations would put
+  Whiteboard first in a later round, the next alive non-Whiteboard moves to the front.
 - Clue order is randomized once at game creation and remains stable across rounds, dropping
   eliminated players.
 - `HOST_ELIMINATE` is the production UI path: after the group votes out loud, the host enters the
@@ -66,16 +66,16 @@ export function startingSpeaker(state: GameState): Player | null
     a tie *during* a PK revote -> no elimination. 'no-elimination' -> nobody out. 'host-decides' -> phase
     stays 'vote' with pkCandidateIds = tied ids and UI uses HOST_ELIMINATE.
   - All-zero/empty tallies count as a full tie among candidates.
-- After any elimination: if eliminated player is Baiban and baibanRule is 'guess-on-elimination'
-  and the game isn't already decided in Baiban's favor -> phase 'baiban-guess' (pendingBaibanGuessPlayerId set).
+- After any elimination: if eliminated player is Whiteboard and baibanRule is 'guess-on-elimination'
+  and the game isn't already decided in Whiteboard's favor -> phase 'baiban-guess' (pendingBaibanGuessPlayerId set).
   `RESOLVE_BAIBAN_GUESS { correct: true }` -> winner 'baiban', phase 'results'.
   `{ correct: false }` -> run win check, then 'resolution' or 'results'.
 - Win check order (after each elimination / guess resolution):
-  1. Baiban 'survive-after-undercovers': all undercovers eliminated + Baiban alive -> winner 'baiban'.
-  2. Civilians: all undercovers eliminated AND (baibanCount 0 or Baiban eliminated) -> 'civilians'.
+  1. Whiteboard 'survive-after-undercovers': all undercovers eliminated + Whiteboard alive -> winner 'baiban'.
+  2. Civilians: all undercovers eliminated AND (baibanCount 0 or Whiteboard eliminated) -> 'civilians'.
   3. Undercover/infiltrator win per `undercoverWinRule`; when `infiltratorsWinTogether`, an alive
-     Baiban counts as an infiltrator and winner is 'infiltrators', else requires an alive undercover
-     and winner is 'undercovers'. 'last-two-or-three' threshold uses STARTING player count (>=6 -> 3, else 2).
+     Whiteboard counts as an infiltrator and winner is 'infiltrators', else requires an alive undercover
+     and winner is 'undercovers'. 'last-two-or-three' threshold uses STARTING player count (>=7 -> 3, else 2).
 - No elimination -> straight to 'resolution' with lastElimination null, then CONTINUE -> next round.
 - CONTINUE from 'resolution': winner set -> 'results'; else round+1, new speaking order and
   starting speaker among alive players, phase 'clue-order'.

@@ -10,6 +10,7 @@ import type { WordPack, WordPair, PackValidationResult } from './types'
 import { builtinPacks } from './packs'
 
 export * from './types'
+export * from './audit'
 export { builtinPacks }
 
 /** Turn a name into a url-safe slug for stable id generation. */

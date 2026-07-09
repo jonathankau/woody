@@ -90,7 +90,7 @@ test('a11y: reveal-pass, reveal-show, vote, results, and How to Play', async ({
 
 /**
  * Vote out the first candidate each round until the results screen appears.
- * Handles the occasional Baiban-guess interstitial (not expected at 4 players,
+ * Handles the occasional Whiteboard-guess interstitial (not expected at 4 players,
  * but safe).
  */
 async function eliminateUntilResults(

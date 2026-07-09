@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { builtinPacks } from './packs'
+import { auditWordPack } from './audit'
 
 describe('built-in pack data integrity', () => {
   it('has exactly 6 packs', () => {
@@ -73,5 +74,10 @@ describe('built-in pack data integrity', () => {
         combos.add(key)
       }
     }
+  })
+
+  it('has no high-confidence prompt quality issues', () => {
+    const issues = builtinPacks.flatMap(auditWordPack).filter((issue) => issue.severity === 'error')
+    expect(issues).toEqual([])
   })
 })

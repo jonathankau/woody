@@ -33,14 +33,14 @@ export function shuffle<T>(items: readonly T[], rng: Rng): T[] {
   return arr
 }
 
-/** Alive, non-Baiban players eligible to be a starting speaker. */
+/** Alive, non-Whiteboard players eligible to be a starting speaker. */
 export function eligibleSpeakers(players: Player[]): Player[] {
   return players.filter((p) => !p.eliminated && p.role !== 'baiban')
 }
 
 /**
  * Build a speaking order for a round among the given alive players, and pick a
- * starting speaker per the rule (never Baiban). Returns the reordered speaking
+ * starting speaker per the rule (never Whiteboard). Returns the reordered speaking
  * order (starting speaker first) and the updated rotation cursor.
  *
  * For `host-chooses` we cannot know the speaker yet, so `speakingOrder` is
@@ -59,13 +59,13 @@ export function buildSpeakingOrder(
   const ordered = shuffle(alive, rng)
 
   if (eligible.length === 0) {
-    // Degenerate: only Baiban left alive. Keep order as-is.
+    // Degenerate: only Whiteboard left alive. Keep order as-is.
     return { speakingOrder: ordered.map((p) => p.id), rotationIndex }
   }
 
   if (rule === 'rotate') {
     // Pick the rotation-th eligible speaker (advancing the cursor), skipping
-    // dead and Baiban implicitly because `eligible` only holds valid players.
+    // dead and Whiteboard implicitly because `eligible` only holds valid players.
     const idx = rotationIndex % eligible.length
     const starter = eligible[idx]
     const next = putFirst(ordered, starter.id)
@@ -79,7 +79,7 @@ export function buildSpeakingOrder(
   }
 
   // host-chooses: ensure the seeded first speaker is at least eligible so that
-  // startingSpeaker() is never Baiban before the host picks.
+  // startingSpeaker() is never Whiteboard before the host picks.
   const firstPlayer = ordered[0]
   if (!firstPlayer || firstPlayer.role === 'baiban' || firstPlayer.eliminated) {
     const next = putFirst(ordered, eligible[0].id)

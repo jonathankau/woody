@@ -276,7 +276,7 @@ const groups = [
     "kbbq waitlist",
     "hot pot reservation",
     "dessert cafe",
-    "boba run",
+    "boba shop",
     "night market",
     "food hall",
     "late-night pho",

@@ -3,9 +3,9 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { HowToPlay } from './HowToPlay'
 import { HowToPlayButton } from './HowToPlayButton'
-import { PRESETS, winChart } from '../engine'
+import { presetById, winChart } from '../engine'
 
-const rules = PRESETS[0].rules(7)
+const rules = presetById('woody-standard').rules(7)
 
 describe('HowToPlay', () => {
   it('opens from a trigger button and renders all seven sections', async () => {
@@ -13,7 +13,7 @@ describe('HowToPlay', () => {
     render(<HowToPlayButton rules={rules} />)
     await user.click(screen.getByTestId('howto-open'))
     const dialog = screen.getByRole('dialog', { name: 'How to Play' })
-    for (const heading of ['Goal', 'Roles', 'Reveal', 'Round Loop', 'Voting', 'Baiban', 'Winning']) {
+    for (const heading of ['Goal', 'Roles', 'Reveal', 'Round Loop', 'Voting', 'Whiteboard', 'Winning']) {
       expect(within(dialog).getByRole('heading', { name: heading })).toBeInTheDocument()
     }
   })
@@ -33,8 +33,8 @@ describe('HowToPlay', () => {
     }
   })
 
-  it('reflects a different ruleset (survive-after-undercovers adds a Baiban survival row)', () => {
-    const classic = PRESETS[1].rules(7)
+  it('reflects a different ruleset (survive-after-undercovers adds a Whiteboard survival row)', () => {
+    const classic = presetById('classic-wodi').rules(7)
     render(<HowToPlay rules={classic} onClose={() => {}} />)
     expect(screen.getByText(/Still be alive when the last undercover/)).toBeInTheDocument()
   })

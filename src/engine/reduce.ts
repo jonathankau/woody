@@ -63,7 +63,7 @@ function reduceChooseStartingSpeaker(state: GameState, playerId: string): GameSt
   if (state.phase !== 'clue-order') return state
   if (state.config.rules.startingSpeakerRule !== 'host-chooses') return state
   const player = state.players.find((p) => p.id === playerId)
-  // Reject Baiban, dead, or unknown ids -> state unchanged.
+  // Reject Whiteboard, dead, or unknown ids -> state unchanged.
   if (!player || player.eliminated || player.role === 'baiban') return state
   const rest = state.speakingOrder.filter((id) => id !== playerId)
   return { ...state, speakingOrder: [playerId, ...rest] }
@@ -222,7 +222,7 @@ function reduceHostEliminate(state: GameState, playerId: string | null): GameSta
 // ---------- elimination pipeline ----------
 
 /**
- * Mark a player eliminated, record the vote, then branch to a Baiban guess or
+ * Mark a player eliminated, record the vote, then branch to a Whiteboard guess or
  * run the win check.
  */
 function applyElimination(
@@ -256,8 +256,8 @@ function applyElimination(
 
   const rules = state.config.rules
 
-  // Baiban guess branch: only when the eliminated player is Baiban, the rule is
-  // guess-on-elimination, and the game isn't already decided in Baiban's favor.
+  // Whiteboard guess branch: only when the eliminated player is Whiteboard, the rule is
+  // guess-on-elimination, and the game isn't already decided in Whiteboard's favor.
   if (player.role === 'baiban' && rules.baibanRule === 'guess-on-elimination') {
     const decided = checkWinner(next)
     if (decided !== 'baiban') {

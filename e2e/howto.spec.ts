@@ -6,7 +6,7 @@ import { freshApp, configureAndStart } from './helpers'
  *     sections, and closes with the close button.
  */
 
-const SECTIONS = ['Goal', 'Roles', 'Reveal', 'Round Loop', 'Voting', 'Baiban', 'Winning']
+const SECTIONS = ['Goal', 'Roles', 'Reveal', 'Round Loop', 'Voting', 'Whiteboard', 'Winning']
 
 async function assertSheetRenders(page: import('@playwright/test').Page): Promise<void> {
   const sheet = page.getByRole('dialog', { name: 'How to Play' })
