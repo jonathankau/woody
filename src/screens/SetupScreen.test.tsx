@@ -106,6 +106,7 @@ describe('SetupScreen', () => {
     await user.click(screen.getByText('Advanced settings'))
     const undercover = screen.getByLabelText('Undercovers') as HTMLInputElement
     await user.clear(undercover)
+    await user.type(undercover, '1')
     await user.click(screen.getByLabelText('Whiteboard in play'))
     expect(screen.getByTestId('setup-summary')).toHaveTextContent('1 undercover')
     expect(screen.getByTestId('setup-summary')).not.toHaveTextContent('Whiteboard')

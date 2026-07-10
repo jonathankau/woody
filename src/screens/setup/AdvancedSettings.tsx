@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import type {
   BaibanRule,
   RuleSet,
@@ -23,6 +24,25 @@ export function AdvancedSettings({
   onBaibanChange: (baibanCount: 0 | 1) => void
 }): React.JSX.Element {
   const maxUndercover = Math.max(1, playerCount - 2 - rules.baibanCount)
+  const [undercoverText, setUndercoverText] = useState(String(rules.undercoverCount))
+
+  useEffect(() => {
+    setUndercoverText(String(rules.undercoverCount))
+  }, [rules.undercoverCount, maxUndercover])
+
+  function updateUndercover(value: string): void {
+    setUndercoverText(value)
+    if (value.trim() === '') return
+    const next = clampInt(value, 1, maxUndercover)
+    setUndercoverText(String(next))
+    onCountOverride({ undercoverCount: next })
+  }
+
+  function restoreUndercoverIfBlank(): void {
+    if (undercoverText.trim() === '') {
+      setUndercoverText(String(rules.undercoverCount))
+    }
+  }
 
   return (
     <details className="setup-advanced">
@@ -35,10 +55,9 @@ export function AdvancedSettings({
             type="number"
             min={1}
             max={maxUndercover}
-            value={rules.undercoverCount}
-            onChange={(e) =>
-              onCountOverride({ undercoverCount: clampInt(e.target.value, 1, maxUndercover) })
-            }
+            value={undercoverText}
+            onBlur={restoreUndercoverIfBlank}
+            onChange={(e) => updateUndercover(e.target.value)}
           />
         </Field>
 
