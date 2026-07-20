@@ -26,16 +26,26 @@ const discouragedStandaloneTerms = new Map<string, string>([
   ['allergy note', 'This reads like setup context, not a clueable prompt.'],
 ])
 
-const allowedRunTerms = new Set([
-  'h mart run',
-  '99 ranch run',
-  'mitsuwa run',
-  'nijiya run',
-  'seafood city run',
-  'patel brothers run',
-  'costco run',
-  'target run',
+const contextualActivityEnding = /\b(run|pickup|dropoff|visit|appointment)\b$/
+const generalMixSpecialistTags = new Set(['office', 'school', 'work'])
+const generalMixSpecialistTerms = new Set([
+  'agenda',
+  'all-hands',
+  'expense report',
+  'final exam',
+  'group project',
+  'inbox zero',
+  'lab partner',
+  'midterm',
+  'office hours',
+  'performance review',
+  'scope creep',
+  'slide deck',
+  'standup',
+  'status update',
+  'study hall',
 ])
+const allowedLongTerms = new Set(['hong kong milk tea'])
 
 function normalize(term: string): string {
   return term.trim().toLowerCase().replace(/\s+/g, ' ')
@@ -66,7 +76,7 @@ function issueForTerm(
     ]
   }
 
-  if (/\b(option|restrictions?|note)\b$/.test(normalized)) {
+  if (/\b(option|restrictions?)\b$/.test(normalized)) {
     return [
       {
         packId: pack.id,
@@ -83,7 +93,7 @@ function issueForTerm(
     ]
   }
 
-  if (normalized.endsWith(' run') && !allowedRunTerms.has(normalized)) {
+  if (contextualActivityEnding.test(normalized)) {
     return [
       {
         packId: pack.id,
@@ -95,7 +105,28 @@ function issueForTerm(
         term,
         severity: 'warning',
         rule: 'vague-activity',
-        reason: 'This may need a concrete object or place to make sense without extra context.',
+        reason: 'Use a standalone object, place, or activity that does not depend on an implied errand.',
+      },
+    ]
+  }
+
+  if (
+    pack.id !== 'pop-culture' &&
+    normalized.split(' ').length >= 4 &&
+    !allowedLongTerms.has(normalized)
+  ) {
+    return [
+      {
+        packId: pack.id,
+        packName: pack.name,
+        pairId: pair.id,
+        pairIndex,
+        a: pair.a,
+        b: pair.b,
+        term,
+        severity: 'warning',
+        rule: 'overlong-prompt',
+        reason: 'Four or more words often add clue ambiguity; shorten this unless it is a familiar fixed name.',
       },
     ]
   }
@@ -104,10 +135,38 @@ function issueForTerm(
 }
 
 export function auditWordPack(pack: WordPack): PackAuditIssue[] {
-  return pack.pairs.flatMap((pair, i) => [
-    ...issueForTerm(pack, pair, i, pair.a),
-    ...issueForTerm(pack, pair, i, pair.b),
-  ])
+  return pack.pairs.flatMap((pair, i) => {
+    const termIssues = [
+      ...issueForTerm(pack, pair, i, pair.a),
+      ...issueForTerm(pack, pair, i, pair.b),
+    ]
+    const leakedTag =
+      pack.id === 'general-mix'
+        ? pair.tags.find((tag) => generalMixSpecialistTags.has(normalize(tag)))
+        : undefined
+    const leakedTerm =
+      pack.id === 'general-mix'
+        ? [pair.a, pair.b].find((term) => generalMixSpecialistTerms.has(normalize(term)))
+        : undefined
+
+    if (!leakedTag && !leakedTerm) return termIssues
+
+    return [
+      ...termIssues,
+      {
+        packId: pack.id,
+        packName: pack.name,
+        pairId: pair.id,
+        pairIndex: i,
+        a: pair.a,
+        b: pair.b,
+        term: `${pair.a} / ${pair.b}`,
+        severity: 'error' as const,
+        rule: 'pack-scope',
+        reason: `Move ${leakedTerm ?? leakedTag} content out of General Mix and into its specialist pack.`,
+      },
+    ]
+  })
 }
 
 export function summarizePackAudit(issues: readonly PackAuditIssue[]): {

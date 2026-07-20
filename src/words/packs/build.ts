@@ -46,11 +46,11 @@ export function buildPairs(
     }
   }
 
-  if (rows.length < target) {
-    throw new Error(`${packId} only has ${rows.length} built-in pairs; expected ${target}.`)
+  if (rows.length !== target) {
+    throw new Error(`${packId} has ${rows.length} built-in pairs; expected exactly ${target}.`)
   }
 
-  return rows.slice(0, target).map(([a, b, tags], i) => ({
+  return rows.map(([a, b, tags], i) => ({
     id: `${packId}-${padId(i + 1)}`,
     a,
     b,

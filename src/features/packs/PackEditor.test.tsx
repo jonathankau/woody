@@ -56,7 +56,7 @@ describe('PackEditor listing', () => {
     expect(screen.getByText(/250 pairs/)).toBeInTheDocument()
 
     await user.type(screen.getByLabelText('Search pairs'), 'boba')
-    expect(screen.getAllByText(/boba cafe/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/boba shop/i).length).toBeGreaterThan(0)
     expect(screen.queryByText(/dessert run/i)).not.toBeInTheDocument()
   })
 })

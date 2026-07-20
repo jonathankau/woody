@@ -70,14 +70,37 @@ describe('built-in pack data integrity', () => {
     for (const pack of builtinPacks) {
       for (const pair of pack.pairs) {
         const key = [pair.a.toLowerCase(), pair.b.toLowerCase()].sort().join('||')
-        expect(combos.has(key)).toBe(false)
+        expect(combos.has(key), `${pack.id} duplicates ${pair.a} / ${pair.b}`).toBe(false)
         combos.add(key)
       }
     }
   })
 
-  it('has no high-confidence prompt quality issues', () => {
-    const issues = builtinPacks.flatMap(auditWordPack).filter((issue) => issue.severity === 'error')
+  it('has no automatic prompt quality issues or warnings', () => {
+    const issues = builtinPacks.flatMap(auditWordPack)
     expect(issues).toEqual([])
+  })
+
+  it('does not reintroduce rejected pair patterns', () => {
+    const rejectedPairs = new Set([
+      'hash browns||yogurt parfait',
+      'lighthouse||water tower',
+      'raincheck||rsvp',
+    ])
+    const rejectedTerms = new Set(['grocery run', 'trailhead'])
+
+    for (const pack of builtinPacks) {
+      for (const pair of pack.pairs) {
+        const terms = [pair.a.toLowerCase(), pair.b.toLowerCase()]
+        const key = [...terms].sort().join('||')
+        expect(rejectedPairs.has(key), `${pack.id} contains rejected pair ${pair.a} / ${pair.b}`).toBe(
+          false,
+        )
+        expect(
+          terms.some((term) => rejectedTerms.has(term)),
+          `${pack.id} contains rejected term in ${pair.a} / ${pair.b}`,
+        ).toBe(false)
+      }
+    }
   })
 })
