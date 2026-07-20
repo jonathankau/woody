@@ -24,6 +24,11 @@ const discouragedStandaloneTerms = new Map<string, string>([
   ['vegan option', 'Add the actual item, like "vegan entree" or "plant-based burger".'],
   ['dietary restrictions', 'This reads like setup context, not a clueable prompt.'],
   ['allergy note', 'This reads like setup context, not a clueable prompt.'],
+  ['chronological feed', 'Use familiar everyday wording instead of interface taxonomy.'],
+  ['padlock', 'Use a more immediately recognizable everyday object name.'],
+  ['recommended feed', 'Use familiar everyday wording instead of interface taxonomy.'],
+  ['splash pad', 'Use a place that nearly everyone can picture immediately.'],
+  ['upright piano', 'Use the familiar object name "piano" or choose a clearer peer.'],
 ])
 
 const contextualActivityEnding = /\b(run|pickup|dropoff|visit|appointment)\b$/

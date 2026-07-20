@@ -87,7 +87,15 @@ describe('built-in pack data integrity', () => {
       'lighthouse||water tower',
       'raincheck||rsvp',
     ])
-    const rejectedTerms = new Set(['grocery run', 'trailhead'])
+    const rejectedTerms = new Set([
+      'chronological feed',
+      'grocery run',
+      'padlock',
+      'recommended feed',
+      'splash pad',
+      'trailhead',
+      'upright piano',
+    ])
 
     for (const pack of builtinPacks) {
       for (const pair of pack.pairs) {

@@ -21,6 +21,22 @@ A pair ships only when it passes all six checks:
 6. **Audience fit**: the term belongs in the selected pack and is recognizable to
    the intended audience. General Mix must avoid workplace jargon and niche terms.
 
+## Instant Recognition
+
+Read each term alone for one second. At least 90% of the pack's intended audience
+should immediately know what it means, and concrete terms should produce a clear
+mental image without additional context. General Mix should clear an even higher
+bar: familiar to nearly any US adult.
+
+- Prefer the common name over the precise subtype: `piano`, not `upright piano`.
+- Avoid interface taxonomy such as `recommended feed` or `chronological feed`.
+- Avoid technically correct words that are uncommon in conversation, even when
+  the object itself is familiar.
+- Avoid modifier-heavy phrases that must be parsed before they can be pictured.
+- Specialized packs may use culturally specific terms only when the intended
+  audience is very likely to recognize them immediately.
+- The challenge should come from comparing the two words, never from decoding one.
+
 If a reviewer cannot quickly imagine three fair clues for each side, reject or
 rewrite the pair.
 
@@ -51,6 +67,7 @@ rewrite the pair.
 - Different semantic roles: `raincheck / RSVP`
 - Visual resemblance without shared use: `lighthouse / water tower`
 - Specialist vocabulary in General Mix: `trailhead`
+- Slow-to-parse vocabulary: `recommended feed`, `upright piano`, `splash pad`
 - Pack leakage: office and school material in General Mix
 
 ## Review Labels
